@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+//        readCustomFonts()
         return true
     }
 
@@ -79,3 +80,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+extension AppDelegate {
+    func readCustomFonts() {
+        let fontFileNames = ["PingFang-Medium","PingFang-Regular"]
+        let dic = UIFactory.getCustomFontNames(fontFileNames: fontFileNames)
+        
+        for fontFileName in dic.keys {
+            if let fontScriptName = dic[fontFileName] {
+                print("fontFileName: \(fontFileName), fontScriptName: \(fontScriptName)")
+            } else {
+                print("Error fontFileName: \(fontFileName)")
+            }
+        }
+        
+        print("fontFileNames count: \(fontFileNames.count), fontScriptName count: \(dic.keys.count)")
+        print()
+    }
+}

@@ -17,6 +17,20 @@
 		A4A3ADB92C240A11002F70D6 /* PokemonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A3ADB82C240A11002F70D6 /* PokemonTests.swift */; };
 		A4A3ADC32C240A11002F70D6 /* PokemonUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A3ADC22C240A11002F70D6 /* PokemonUITests.swift */; };
 		A4A3ADC52C240A11002F70D6 /* PokemonUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A3ADC42C240A11002F70D6 /* PokemonUITestsLaunchTests.swift */; };
+		A4B4EC3E2C240F5500C9EDCE /* ExColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC3D2C240F5500C9EDCE /* ExColor.swift */; };
+		A4B4EC402C240F6A00C9EDCE /* ExImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC3F2C240F6A00C9EDCE /* ExImage.swift */; };
+		A4B4EC422C240F8300C9EDCE /* ExUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC412C240F8300C9EDCE /* ExUIView.swift */; };
+		A4B4EC442C240FA100C9EDCE /* DataErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC432C240FA100C9EDCE /* DataErrors.swift */; };
+		A4B4EC462C24111E00C9EDCE /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC452C24111E00C9EDCE /* DateHelper.swift */; };
+		A4B4EC482C24112F00C9EDCE /* PrefHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC472C24112F00C9EDCE /* PrefHelper.swift */; };
+		A4B4EC4A2C24114200C9EDCE /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC492C24114200C9EDCE /* FileHelper.swift */; };
+		A4B4EC4C2C24115E00C9EDCE /* FontFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC4B2C24115E00C9EDCE /* FontFactory.swift */; };
+		A4B4EC4E2C24117600C9EDCE /* ColorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC4D2C24117600C9EDCE /* ColorFactory.swift */; };
+		A4B4EC502C24118600C9EDCE /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC4F2C24118600C9EDCE /* UIFactory.swift */; };
+		A4B4EC522C24119B00C9EDCE /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC512C24119B00C9EDCE /* LanguageManager.swift */; };
+		A4B4EC542C2411C600C9EDCE /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC532C2411C600C9EDCE /* MainTabBarController.swift */; };
+		A4B4EC562C24123F00C9EDCE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC552C24123F00C9EDCE /* HomeViewController.swift */; };
+		A4B4EC582C24130600C9EDCE /* ExUISearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC572C24130600C9EDCE /* ExUISearchBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +65,20 @@
 		A4A3ADBE2C240A11002F70D6 /* PokemonUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PokemonUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4A3ADC22C240A11002F70D6 /* PokemonUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonUITests.swift; sourceTree = "<group>"; };
 		A4A3ADC42C240A11002F70D6 /* PokemonUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		A4B4EC3D2C240F5500C9EDCE /* ExColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExColor.swift; sourceTree = "<group>"; };
+		A4B4EC3F2C240F6A00C9EDCE /* ExImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExImage.swift; sourceTree = "<group>"; };
+		A4B4EC412C240F8300C9EDCE /* ExUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExUIView.swift; sourceTree = "<group>"; };
+		A4B4EC432C240FA100C9EDCE /* DataErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataErrors.swift; sourceTree = "<group>"; };
+		A4B4EC452C24111E00C9EDCE /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
+		A4B4EC472C24112F00C9EDCE /* PrefHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefHelper.swift; sourceTree = "<group>"; };
+		A4B4EC492C24114200C9EDCE /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
+		A4B4EC4B2C24115E00C9EDCE /* FontFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontFactory.swift; sourceTree = "<group>"; };
+		A4B4EC4D2C24117600C9EDCE /* ColorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFactory.swift; sourceTree = "<group>"; };
+		A4B4EC4F2C24118600C9EDCE /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
+		A4B4EC512C24119B00C9EDCE /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
+		A4B4EC532C2411C600C9EDCE /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		A4B4EC552C24123F00C9EDCE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		A4B4EC572C24130600C9EDCE /* ExUISearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExUISearchBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +137,15 @@
 				A4A3ADAC2C240A11002F70D6 /* LaunchScreen.storyboard */,
 				A4A3ADAF2C240A11002F70D6 /* Info.plist */,
 				A4A3ADA72C240A10002F70D6 /* Pokemon.xcdatamodeld */,
+				A4B4EC332C240D3E00C9EDCE /* Resources */,
+				A4B4EC342C240D4700C9EDCE /* Models */,
+				A4B4EC352C240D4D00C9EDCE /* ViewModels */,
+				A4B4EC362C240D5300C9EDCE /* Views */,
+				A4B4EC372C240D6100C9EDCE /* Controllers */,
+				A4B4EC382C240D6600C9EDCE /* Services */,
+				A4B4EC392C240D7400C9EDCE /* Utilities */,
+				A4B4EC3A2C240D7B00C9EDCE /* Helpers */,
+				A4B4EC3B2C240D8400C9EDCE /* Extensions */,
 			);
 			path = Pokemon;
 			sourceTree = "<group>";
@@ -128,6 +165,91 @@
 				A4A3ADC42C240A11002F70D6 /* PokemonUITestsLaunchTests.swift */,
 			);
 			path = PokemonUITests;
+			sourceTree = "<group>";
+		};
+		A4B4EC332C240D3E00C9EDCE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A4B4EC3C2C240E3300C9EDCE /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A4B4EC342C240D4700C9EDCE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A4B4EC352C240D4D00C9EDCE /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A4B4EC362C240D5300C9EDCE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A4B4EC372C240D6100C9EDCE /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A4B4EC532C2411C600C9EDCE /* MainTabBarController.swift */,
+				A4B4EC552C24123F00C9EDCE /* HomeViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		A4B4EC382C240D6600C9EDCE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A4B4EC392C240D7400C9EDCE /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A4B4EC4B2C24115E00C9EDCE /* FontFactory.swift */,
+				A4B4EC4D2C24117600C9EDCE /* ColorFactory.swift */,
+				A4B4EC4F2C24118600C9EDCE /* UIFactory.swift */,
+				A4B4EC512C24119B00C9EDCE /* LanguageManager.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A4B4EC3A2C240D7B00C9EDCE /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A4B4EC432C240FA100C9EDCE /* DataErrors.swift */,
+				A4B4EC452C24111E00C9EDCE /* DateHelper.swift */,
+				A4B4EC472C24112F00C9EDCE /* PrefHelper.swift */,
+				A4B4EC492C24114200C9EDCE /* FileHelper.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		A4B4EC3B2C240D8400C9EDCE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A4B4EC3D2C240F5500C9EDCE /* ExColor.swift */,
+				A4B4EC3F2C240F6A00C9EDCE /* ExImage.swift */,
+				A4B4EC572C24130600C9EDCE /* ExUISearchBar.swift */,
+				A4B4EC412C240F8300C9EDCE /* ExUIView.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A4B4EC3C2C240E3300C9EDCE /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,9 +383,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4B4EC582C24130600C9EDCE /* ExUISearchBar.swift in Sources */,
 				A4A3ADA32C240A10002F70D6 /* ViewController.swift in Sources */,
 				A4A3ADA92C240A10002F70D6 /* Pokemon.xcdatamodeld in Sources */,
+				A4B4EC4E2C24117600C9EDCE /* ColorFactory.swift in Sources */,
+				A4B4EC562C24123F00C9EDCE /* HomeViewController.swift in Sources */,
+				A4B4EC442C240FA100C9EDCE /* DataErrors.swift in Sources */,
+				A4B4EC502C24118600C9EDCE /* UIFactory.swift in Sources */,
+				A4B4EC4C2C24115E00C9EDCE /* FontFactory.swift in Sources */,
+				A4B4EC422C240F8300C9EDCE /* ExUIView.swift in Sources */,
+				A4B4EC4A2C24114200C9EDCE /* FileHelper.swift in Sources */,
+				A4B4EC482C24112F00C9EDCE /* PrefHelper.swift in Sources */,
+				A4B4EC522C24119B00C9EDCE /* LanguageManager.swift in Sources */,
+				A4B4EC542C2411C600C9EDCE /* MainTabBarController.swift in Sources */,
+				A4B4EC402C240F6A00C9EDCE /* ExImage.swift in Sources */,
 				A4A3AD9F2C240A10002F70D6 /* AppDelegate.swift in Sources */,
+				A4B4EC462C24111E00C9EDCE /* DateHelper.swift in Sources */,
+				A4B4EC3E2C240F5500C9EDCE /* ExColor.swift in Sources */,
 				A4A3ADA12C240A10002F70D6 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
