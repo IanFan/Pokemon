@@ -10,6 +10,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     let scale: CGFloat = UIFactory.getScale()
+    let pokemonViewModel = PokemonViewModel()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
@@ -36,10 +37,12 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        pokemonViewModel.delegate = self
+        
         setupUI()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//            self.requestAPIs(isRefresh: false)
+            self.requestAPIs(isRefresh: false)
         }
     }
     
@@ -48,6 +51,13 @@ class HomeViewController: UIViewController {
     }
     
     func requestAPIs(isRefresh: Bool) {
-        
+        pokemonViewModel.loadData(isRefresh: isRefresh)
+    }
+}
+
+extension HomeViewController: PokemonViewModelProtocol {
+    func updatePokemonUI(complete: (Bool)->Void) {
+        print(#function)
+        complete(true)
     }
 }
