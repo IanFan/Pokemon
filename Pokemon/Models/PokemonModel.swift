@@ -1,5 +1,5 @@
 //
-//  pokemonModel.swift
+//  PokemonModel.swift
 //  Pokemon
 //
 //  Created by Ian Fan on 2024/6/20.

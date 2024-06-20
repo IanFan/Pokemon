@@ -42,10 +42,8 @@ class PokemonViewModel: NSObject {
             page = 0
         }
         
-        let api: String = "pokemon"
-        
         self.isRequesting = true
-        let params = FileParams_pokemon(api: api, page: page)
+        let params = FileParams_pokemon(page: page)
         let loader = GenericSingleDataLoader(dataLoader: PokemonLoader())
         loader.loadData(params: params, completion: { [weak self] result in
             guard let self = self else { return }

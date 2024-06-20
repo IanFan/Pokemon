@@ -21,7 +21,7 @@ protocol FileParams {
 // MARK: - LOADER user
 
 struct FileParams_pokemon: FileParams {
-    var api: String
+    var api: String = "pokemon"
     var limit: Int = 20
     var page: Int
     var data: Data?
@@ -30,7 +30,7 @@ struct FileParams_pokemon: FileParams {
         return limit*page
     }
     var cacheKey: String {
-        return "\(api)_\(limit)_\(offset)"
+        return "List_\(api)_\(limit)_\(offset)"
     }
 }
 
@@ -45,6 +45,43 @@ class LoadFileStrategy_pokemon: LoadFileStrategy {
         
         return await withCheckedContinuation { continuation in
             let url = "\(RequestStruct.DOMAIN)/\(api)/?limit=\(limit)&offset=\(offset)"
+            RequestManager.shared.httpGet(url: url, parameters: nil, httpClosure: { data, response, error in
+                if let data = data {
+                    var resultParams = params
+                    resultParams.data = data
+                    continuation.resume(returning: .success(resultParams))
+                } else {
+                    let error = NSError(domain: "RequestError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Request failed or no data"])
+                    continuation.resume(returning: .failure(error))
+                }
+            })
+        }
+    }
+}
+
+// MARK: - LOADER user
+
+struct FileParams_pokemonDetail: FileParams {
+    var api: String = "pokemon"
+    var name: String
+    var id: Int?
+    var data: Data?
+    
+    var cacheKey: String {
+        return "Detail_\(api)_\(name)"
+    }
+}
+
+class LoadFileStrategy_pokemonDetail: LoadFileStrategy {
+    typealias Params = FileParams_pokemonDetail
+    typealias ResultType = FileParams_pokemonDetail
+    
+    func loadSingleFile(params: Params) async throws -> Result<ResultType, Error> {
+        let api = params.api
+        let name = params.name
+        
+        return await withCheckedContinuation { continuation in
+            let url = "\(RequestStruct.DOMAIN)/\(api)/\(name)"
             RequestManager.shared.httpGet(url: url, parameters: nil, httpClosure: { data, response, error in
                 if let data = data {
                     var resultParams = params

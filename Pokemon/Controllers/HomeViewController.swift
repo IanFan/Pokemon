@@ -11,6 +11,7 @@ import UIKit
 class HomeViewController: UIViewController {
     let scale: CGFloat = UIFactory.getScale()
     let pokemonViewModel = PokemonViewModel()
+    let pokemonDetailViewModel = PokemonDetailViewModel()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
@@ -38,6 +39,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         
         pokemonViewModel.delegate = self
+        pokemonDetailViewModel.delegate = self
         
         setupUI()
         
@@ -51,7 +53,8 @@ class HomeViewController: UIViewController {
     }
     
     func requestAPIs(isRefresh: Bool) {
-        pokemonViewModel.loadData(isRefresh: isRefresh)
+//        pokemonViewModel.loadData(isRefresh: isRefresh)
+        pokemonDetailViewModel.loadData(name: "bulbasaur", id: 1)
     }
 }
 
@@ -59,5 +62,11 @@ extension HomeViewController: PokemonViewModelProtocol {
     func updatePokemonUI(complete: (Bool)->Void) {
         print(#function)
         complete(true)
+    }
+}
+
+extension HomeViewController: PokemonDetailViewModelProtocol {
+    func updatePokemonDetailUI() {
+        print(#function)
     }
 }
