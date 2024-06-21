@@ -8,14 +8,14 @@
 import Foundation
 import UIKit
 
-protocol PokemonViewModelProtocol: AnyObject {
-    func updatePokemonUI(complete: (Bool)->Void)
+protocol PokemonListViewModelProtocol: AnyObject {
+    func updatePokemonListUI(complete: (Bool)->Void)
 }
 
-class PokemonViewModel: NSObject {
-    weak var delegate: PokemonViewModelProtocol?
-    var pokemons = [PokemonModel]()
-    var loadMorePokemons = [PokemonModel]()
+class PokemonListViewModel: NSObject {
+    weak var delegate: PokemonListViewModelProtocol?
+    var pokemons = [PokemonListModel]()
+    var loadMorePokemons = [PokemonListModel]()
     var page: Int = 0
     var isRequesting: Bool = false
     
@@ -24,7 +24,7 @@ class PokemonViewModel: NSObject {
     
     func loadData(isRefresh: Bool = false) {
         loadData(isRefresh: isRefresh, completion: { result in
-            self.delegate?.updatePokemonUI(complete: { [weak self] (isCompleted: Bool)->Void in
+            self.delegate?.updatePokemonListUI(complete: { [weak self] (isCompleted: Bool)->Void in
                 guard let self = self else { return }
                 self.pokemons.append(contentsOf: loadMorePokemons)
                 self.loadMorePokemons.removeAll()
@@ -32,7 +32,7 @@ class PokemonViewModel: NSObject {
         })
     }
     
-    func loadData(isRefresh: Bool = false, completion: @escaping (Result<[PokemonModel], Error>) -> Void) {
+    func loadData(isRefresh: Bool = false, completion: @escaping (Result<[PokemonListModel], Error>) -> Void) {
         
         guard !isRequesting else {
             return
@@ -43,8 +43,8 @@ class PokemonViewModel: NSObject {
         }
         
         self.isRequesting = true
-        let params = FileParams_pokemon(page: page)
-        let loader = GenericSingleDataLoader(dataLoader: PokemonLoader())
+        let params = FileParams_pokemonList(page: page)
+        let loader = GenericSingleDataLoader(dataLoader: PokemonListLoader())
         loader.loadData(params: params, completion: { [weak self] result in
             guard let self = self else { return }
             self.isRequesting = false
@@ -74,7 +74,7 @@ class PokemonViewModel: NSObject {
         })
     }
     
-    private func sortPokemonObjs(objs: [PokemonModel]) -> [PokemonModel] {
+    private func sortPokemonObjs(objs: [PokemonListModel]) -> [PokemonListModel] {
         var objs = objs
         objs.sort {
             ($0.id ?? 0) < ($1.id ?? 0)

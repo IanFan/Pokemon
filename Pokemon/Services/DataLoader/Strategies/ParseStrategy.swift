@@ -17,25 +17,25 @@ protocol ParseStrategy {
     func parseParams(params: DataParseParams) -> ResultType?
 }
 
-// MARK: - PARSER Pokemon
-struct DataParseParams_pokemon: DataParseParams {
+// MARK: - PARSER PokemonList
+struct DataParseParams_pokemonList: DataParseParams {
     var data: Data
 }
 
-class ParseStrategy_pokemon: ParseStrategy {
-    typealias DataParseParams = DataParseParams_pokemon
-    typealias ResultType = PokemonResponseModel
+class ParseStrategy_pokemonList: ParseStrategy {
+    typealias DataParseParams = DataParseParams_pokemonList
+    typealias ResultType = PokemonListResponseModel
     
-    func parseParams(params: DataParseParams_pokemon) -> PokemonResponseModel? {
+    func parseParams(params: DataParseParams_pokemonList) -> PokemonListResponseModel? {
         let data = params.data
         
-        let parser = PokemonParser()
+        let parser = PokemonListParser()
         let result = parser.parse(data: data)
         
         switch result {
         case .success(let response):
             return response
-        case .failure(let failure):
+        case .failure(_):
             return nil
         }
     }
@@ -59,10 +59,57 @@ class ParseStrategy_pokemonDetail: ParseStrategy {
         switch result {
         case .success(let response):
             return response
-        case .failure(let failure):
+        case .failure(_):
             return nil
         }
     }
 }
 
+// MARK: - PARSER PokemonTypeList
+struct DataParseParams_pokemonTypeList: DataParseParams {
+    var data: Data
+}
+
+class ParseStrategy_pokemonTypeList: ParseStrategy {
+    typealias DataParseParams = DataParseParams_pokemonTypeList
+    typealias ResultType = PokemonTypeListResponseModel
+    
+    func parseParams(params: DataParseParams_pokemonTypeList) -> PokemonTypeListResponseModel? {
+        let data = params.data
+        
+        let parser = PokemonTypeListParser()
+        let result = parser.parse(data: data)
+        
+        switch result {
+        case .success(let response):
+            return response
+        case .failure(_):
+            return nil
+        }
+    }
+}
+
+// MARK: - PARSER PokemonDetail
+struct DataParseParams_pokemonTypeDetail: DataParseParams {
+    var data: Data
+}
+
+class ParseStrategy_pokemonTypeDetail: ParseStrategy {
+    typealias DataParseParams = DataParseParams_pokemonTypeDetail
+    typealias ResultType = PokemonTypeDetailModel
+    
+    func parseParams(params: DataParseParams_pokemonTypeDetail) -> PokemonTypeDetailModel? {
+        let data = params.data
+        
+        let parser = PokemonTypeDetailParser()
+        let result = parser.parse(data: data)
+        
+        switch result {
+        case .success(let response):
+            return response
+        case .failure(_):
+            return nil
+        }
+    }
+}
 

@@ -1,19 +1,19 @@
 //
-//  PokemonParser.swift
+//  PokemonTypeListParser.swift
 //  Pokemon
 //
-//  Created by Ian Fan on 2024/6/20.
+//  Created by Ian Fan on 2024/6/21.
 //
 
 import Foundation
 
-class PokemonParser: JSONParserStrategy {
-    typealias ParseResult = PokemonResponseModel
+class PokemonTypeListParser: JSONParserStrategy {
+    typealias ParseResult = PokemonTypeListResponseModel
     
     func parse(data: Data) -> Result<ParseResult, Error> {
         do {
             let decoder = JSONDecoder()
-            let responseModel = try decoder.decode(PokemonResponseModel.self, from: data)
+            let responseModel = try decoder.decode(PokemonTypeListResponseModel.self, from: data)
             return .success(responseModel)
         } catch {
             print("Parser Failed to load data: \(error.localizedDescription)")

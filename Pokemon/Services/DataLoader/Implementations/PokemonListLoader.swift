@@ -8,9 +8,9 @@
 import Foundation
 import UIKit
 
-struct PokemonLoader: GenericSingleDataLoaderProtocol {
-    typealias Params = FileParams_pokemon
-    typealias ResultType = PokemonResponseModel
+struct PokemonListLoader: GenericSingleDataLoaderProtocol {
+    typealias Params = FileParams_pokemonList
+    typealias ResultType = PokemonListResponseModel
     
     func loadDataFromCache(params: Params) throws -> Result<ResultType, Error> {
         guard let resultParams = try loadCacheFile(params: params) else {
@@ -19,7 +19,7 @@ struct PokemonLoader: GenericSingleDataLoaderProtocol {
         guard let data = resultParams.data else {
             return .failure(CacheError.cacheError)
         }
-        guard let model = try parse(params: DataParseParams_pokemon(data: data)) else {
+        guard let model = try parse(params: DataParseParams_pokemonList(data: data)) else {
             return .failure(ParseError.parseError)
         }
         return .success(model)
@@ -32,7 +32,7 @@ struct PokemonLoader: GenericSingleDataLoaderProtocol {
         guard let data = resultParams.data else {
             return .failure(LoadLocalError.loadError)
         }
-        guard let model = try parse(params: DataParseParams_pokemon(data: data)) else {
+        guard let model = try parse(params: DataParseParams_pokemonList(data: data)) else {
             return .failure(ParseError.parseError)
         }
         return .success(model)
@@ -45,7 +45,7 @@ struct PokemonLoader: GenericSingleDataLoaderProtocol {
         guard let data = resultParams.data else {
             return .failure(LoadError.loadError)
         }
-        guard let model = try parse(params: DataParseParams_pokemon(data: data)) else {
+        guard let model = try parse(params: DataParseParams_pokemonList(data: data)) else {
             return .failure(ParseError.parseError)
         }
         let cacheSuccess = saveCacheFile(params: resultParams)
@@ -94,7 +94,7 @@ struct PokemonLoader: GenericSingleDataLoaderProtocol {
     }
     
     private func loadOnlineFile(params: Params) async throws -> Params? {
-        let loader = LoadFileStrategy_pokemon()
+        let loader = LoadFileStrategy_pokemonList()
         let result = try await loader.loadSingleFile(params: params)
         switch result {
         case .success(let resultParams):
@@ -104,10 +104,10 @@ struct PokemonLoader: GenericSingleDataLoaderProtocol {
         }
     }
     
-    private func parse(params: DataParseParams) throws -> PokemonResponseModel? {
+    private func parse(params: DataParseParams) throws -> PokemonListResponseModel? {
         switch params {
-        case let params as DataParseParams_pokemon:
-            let parser = ParseStrategy_pokemon()
+        case let params as DataParseParams_pokemonList:
+            let parser = ParseStrategy_pokemonList()
             guard let responseModel = parser.parseParams(params: params) else {
                 throw ParseError.parseError
             }
@@ -118,7 +118,7 @@ struct PokemonLoader: GenericSingleDataLoaderProtocol {
     }
 }
 
-extension PokemonLoader {
+extension PokemonListLoader {
     func mockCacheLocalData(params: Params) -> Bool {
         do {
             if let resultParams = try loadLocalFile(params: params) {

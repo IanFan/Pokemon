@@ -18,9 +18,9 @@ protocol FileParams {
     var data: Data? {get set}
 }
 
-// MARK: - LOADER user
+// MARK: - LOADER pokemonList
 
-struct FileParams_pokemon: FileParams {
+struct FileParams_pokemonList: FileParams {
     var api: String = "pokemon"
     var limit: Int = 20
     var page: Int
@@ -30,13 +30,13 @@ struct FileParams_pokemon: FileParams {
         return limit*page
     }
     var cacheKey: String {
-        return "List_\(api)_\(limit)_\(offset)"
+        return "PokemonList_\(api)_\(limit)_\(offset)"
     }
 }
 
-class LoadFileStrategy_pokemon: LoadFileStrategy {
-    typealias Params = FileParams_pokemon
-    typealias ResultType = FileParams_pokemon
+class LoadFileStrategy_pokemonList: LoadFileStrategy {
+    typealias Params = FileParams_pokemonList
+    typealias ResultType = FileParams_pokemonList
     
     func loadSingleFile(params: Params) async throws -> Result<ResultType, Error> {
         let api = params.api
@@ -59,7 +59,7 @@ class LoadFileStrategy_pokemon: LoadFileStrategy {
     }
 }
 
-// MARK: - LOADER user
+// MARK: - LOADER pokemonDetail
 
 struct FileParams_pokemonDetail: FileParams {
     var api: String = "pokemon"
@@ -68,13 +68,91 @@ struct FileParams_pokemonDetail: FileParams {
     var data: Data?
     
     var cacheKey: String {
-        return "Detail_\(api)_\(name)"
+        return "PokemonDetail_\(api)_\(name)"
     }
 }
 
 class LoadFileStrategy_pokemonDetail: LoadFileStrategy {
     typealias Params = FileParams_pokemonDetail
     typealias ResultType = FileParams_pokemonDetail
+    
+    func loadSingleFile(params: Params) async throws -> Result<ResultType, Error> {
+        let api = params.api
+        let name = params.name
+        
+        return await withCheckedContinuation { continuation in
+            let url = "\(RequestStruct.DOMAIN)/\(api)/\(name)"
+            RequestManager.shared.httpGet(url: url, parameters: nil, httpClosure: { data, response, error in
+                if let data = data {
+                    var resultParams = params
+                    resultParams.data = data
+                    continuation.resume(returning: .success(resultParams))
+                } else {
+                    let error = NSError(domain: "RequestError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Request failed or no data"])
+                    continuation.resume(returning: .failure(error))
+                }
+            })
+        }
+    }
+}
+
+// MARK: - LOADER pokemonTypeList
+
+struct FileParams_pokemonTypeList: FileParams {
+    var api: String = "type"
+    var limit: Int = 30
+    var page: Int
+    var data: Data?
+    
+    var offset: Int {
+        return limit*page
+    }
+    var cacheKey: String {
+        return "PokemonTypeList_\(api)_\(limit)_\(offset)"
+    }
+}
+
+class LoadFileStrategy_pokemonTypeList: LoadFileStrategy {
+    typealias Params = FileParams_pokemonTypeList
+    typealias ResultType = FileParams_pokemonTypeList
+    
+    func loadSingleFile(params: Params) async throws -> Result<ResultType, Error> {
+        let api = params.api
+        let limit = params.limit
+        let offset = params.offset
+        
+        return await withCheckedContinuation { continuation in
+            let url = "\(RequestStruct.DOMAIN)/\(api)/?limit=\(limit)&offset=\(offset)"
+            RequestManager.shared.httpGet(url: url, parameters: nil, httpClosure: { data, response, error in
+                if let data = data {
+                    var resultParams = params
+                    resultParams.data = data
+                    continuation.resume(returning: .success(resultParams))
+                } else {
+                    let error = NSError(domain: "RequestError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Request failed or no data"])
+                    continuation.resume(returning: .failure(error))
+                }
+            })
+        }
+    }
+}
+
+// MARK: - LOADER pokemonTypeDetail
+
+struct FileParams_pokemonTypeDetail: FileParams {
+    var api: String = "type"
+    var name: String
+    var id: Int?
+    var data: Data?
+    
+    var cacheKey: String {
+        return "PokemonTypeDetail_\(api)_\(name)"
+    }
+}
+
+class LoadFileStrategy_pokemonTypeDetail: LoadFileStrategy {
+    typealias Params = FileParams_pokemonTypeDetail
+    typealias ResultType = FileParams_pokemonTypeDetail
     
     func loadSingleFile(params: Params) async throws -> Result<ResultType, Error> {
         let api = params.api
