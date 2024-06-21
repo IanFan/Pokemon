@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol PokemonListViewModelProtocol: AnyObject {
-    func updatePokemonListUI(complete: (Bool)->Void)
+    func updatePokemonListUI(loadMorePokemons: [PokemonListModel])
 }
 
 class PokemonListViewModel: NSObject {
@@ -24,15 +24,18 @@ class PokemonListViewModel: NSObject {
     
     func loadData(isRefresh: Bool = false) {
         loadData(isRefresh: isRefresh, completion: { result in
-            self.delegate?.updatePokemonListUI(complete: { [weak self] (isCompleted: Bool)->Void in
-                guard let self = self else { return }
-                self.pokemons.append(contentsOf: loadMorePokemons)
-                self.loadMorePokemons.removeAll()
-            })
+            switch result {
+            case .success(let resultParams):
+                DispatchQueue.main.async {
+                    self.delegate?.updatePokemonListUI(loadMorePokemons: self.loadMorePokemons)
+                }
+            case .failure(let error):
+                self.failAction?()
+            }
         })
     }
     
-    func loadData(isRefresh: Bool = false, completion: @escaping (Result<[PokemonListModel], Error>) -> Void) {
+    private func loadData(isRefresh: Bool = false, completion: @escaping (Result<[PokemonListModel], Error>) -> Void) {
         
         guard !isRequesting else {
             return
@@ -60,15 +63,16 @@ class PokemonListViewModel: NSObject {
                 let sortedObjs = self.sortPokemonObjs(objs: objs)
                 DispatchQueue.main.async {
                     self.loadMorePokemons = sortedObjs
+                    self.pokemons.append(contentsOf: sortedObjs)
                     self.page += 1
-                    completion(.success(sortedObjs))
                     self.successAction?()
+                    completion(.success(sortedObjs))
                 }
             case .failure(let error):
                 print("load error: \(error)")
                 DispatchQueue.main.async {
-                    completion(.failure(LoadError.loadError))
                     self.failAction?()
+                    completion(.failure(LoadError.loadError))
                 }
             }
         })

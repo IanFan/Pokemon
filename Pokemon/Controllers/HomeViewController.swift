@@ -61,9 +61,8 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: PokemonListViewModelProtocol {
-    func updatePokemonListUI(complete: (Bool)->Void) {
+    func updatePokemonListUI(loadMorePokemons: [PokemonListModel]) {
         print(#function)
-        complete(true)
     }
 }
 

@@ -64,11 +64,11 @@ class LoadFileStrategy_pokemonList: LoadFileStrategy {
 struct FileParams_pokemonDetail: FileParams {
     var api: String = "pokemon"
     var name: String
-    var id: Int?
+    var id: Int
     var data: Data?
     
     var cacheKey: String {
-        return "PokemonDetail_\(api)_\(name)"
+        return "PokemonDetail_\(api)_\(id)"
     }
 }
 
@@ -142,11 +142,11 @@ class LoadFileStrategy_pokemonTypeList: LoadFileStrategy {
 struct FileParams_pokemonTypeDetail: FileParams {
     var api: String = "type"
     var name: String
-    var id: Int?
+    var id: Int
     var data: Data?
     
     var cacheKey: String {
-        return "PokemonTypeDetail_\(api)_\(name)"
+        return "PokemonTypeDetail_\(api)_\(id)"
     }
 }
 

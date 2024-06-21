@@ -49,7 +49,7 @@ extension RequestManager {
         
         let request = NSMutableURLRequest(url: requestUrl,
                                           cachePolicy: .useProtocolCachePolicy,
-                                          timeoutInterval: 10.0)
+                                          timeoutInterval: 15.0)
         
         request.httpMethod = "GET"
         
@@ -86,7 +86,7 @@ extension RequestManager {
         
         let request = NSMutableURLRequest(url: requestUrl,
                                           cachePolicy: .useProtocolCachePolicy,
-                                          timeoutInterval: 10.0)
+                                          timeoutInterval: 15.0)
         
         request.httpMethod = "POST"
         

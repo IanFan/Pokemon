@@ -18,11 +18,10 @@ struct PokemonListModel: Codable {
     let name: String
     let url: String
     
-    var id: Int? {
-        // Extract the ID from the URL
+    var id: Int {
         guard let idString = url.split(separator: "/").last else {
-            return nil
+            return 0
         }
-        return Int(idString)
+        return Int(idString) ?? 0
     }
 }

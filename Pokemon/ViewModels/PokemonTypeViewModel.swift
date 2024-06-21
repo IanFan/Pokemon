@@ -62,10 +62,6 @@ class PokemonTypeViewModel: NSObject {
                 }
             }
             
-            
-//            self.delegate?.updatePokemonListUI(complete: { [weak self] (isCompleted: Bool)->Void in
-//                guard let self = self else { return }
-//            })
             self.delegate?.updatePokemonTypeUI()
         })
     }
@@ -144,7 +140,8 @@ class PokemonTypeViewModel: NSObject {
     
     private func loadSingleDetailData(isRefresh: Bool = false, pokemonTypeList: PokemonTypeListModel,  completion: @escaping (Result<(String, PokemonTypeDetailModel), Error>) -> Void) {
         let name = pokemonTypeList.name
-        let params = FileParams_pokemonTypeDetail(name: name)
+        let id = pokemonTypeList.id
+        let params = FileParams_pokemonTypeDetail(name: name, id: id)
         let loader = GenericSingleDataLoader(dataLoader: PokemonTypeDetailLoader())
         loader.loadData(params: params, completion: { [weak self] result in
             guard let self = self else { return }
