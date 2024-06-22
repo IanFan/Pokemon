@@ -8,8 +8,13 @@
 import Foundation
 import UIKit
 
+protocol HomePokemonCellProtocol: AnyObject {
+    func homePokemonCellFavoriteUpdated()
+}
+
 class HomePokemonCell: UICollectionViewCell, PokemonDetailViewModelProtocol {
     let scale: CGFloat = UIFactory.getScale()
+    weak var delegate: HomePokemonCellProtocol?
     var item: HomePokemonListModel?
     let pokemonDetailViewModel = PokemonDetailViewModel()
     
@@ -71,7 +76,7 @@ class HomePokemonListCell: HomePokemonCell {
         let lbId = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
         let lbName = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
         let lbTypes = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
-        let btnFavorite = UIFactory.createImageButton(name: "")
+        let btnFavorite = UIFactory.createImageButton(name: "", tintColor: ColorFactory.heartRed)
         
         self.ivSprite = ivSprite
         self.lbId = lbId
@@ -142,11 +147,27 @@ class HomePokemonListCell: HomePokemonCell {
             print()
         }
         
+        updateFavoriteUI()
+    }
+    
+    func updateFavoriteUI() {
+        guard let item = self.item else {
+            return
+        }
         btnFavorite?.setBackgroundImage(UIFactory.getImage(named: item.isFavorite ? "heart.fill" : "heart"), for: .normal)
     }
     
     @objc func btnFavoriteTapped() {
         print(#function)
+        guard var item = self.item else {
+            return
+        }
+        let isFavorite = !item.isFavorite
+        item.isFavorite = isFavorite
+        RealmManager.updatePokemonFavorite(pokemonID: item.id, isFavorite: isFavorite)
+        self.item = item
+        updateFavoriteUI()
+        self.delegate?.homePokemonCellFavoriteUpdated()
     }
 }
     

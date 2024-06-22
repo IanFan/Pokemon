@@ -35,7 +35,7 @@ class HomePokemonGridCell: HomePokemonCell {
         let lbId = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
         let lbName = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
         let lbTypes = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
-        let btnFavorite = UIFactory.createImageButton(name: "")
+        let btnFavorite = UIFactory.createImageButton(name: "", tintColor: ColorFactory.heartRed)
         
         self.ivSprite = ivSprite
         self.lbId = lbId

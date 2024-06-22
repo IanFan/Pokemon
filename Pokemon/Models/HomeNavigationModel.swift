@@ -8,6 +8,6 @@
 import Foundation
 
 struct HomeNavigationModel: Codable {
-    let isShowFavorite: Bool
-    let isShowGrid: Bool
+    var isShowFavorite: Bool
+    var isShowGrid: Bool
 }

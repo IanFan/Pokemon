@@ -16,6 +16,7 @@ class PokemonListViewModel: NSObject {
     weak var delegate: PokemonListViewModelProtocol?
     var pokemons = [PokemonListModel]()
     var loadMorePokemons = [PokemonListModel]()
+    var favoritePokemons = [PokemonListModel]()
     var page: Int = 0
     var isRequesting: Bool = false
     var requestedEndData: Bool = false
@@ -99,7 +100,7 @@ class PokemonListViewModel: NSObject {
 extension PokemonListViewModel {
     func getPokemonList(isShowFavorite: Bool = false) -> [PokemonListModel] {
         if isShowFavorite {
-            return []
+            return favoritePokemons
         } else {
             return pokemons
         }
@@ -107,5 +108,14 @@ extension PokemonListViewModel {
     
     func getPokemonListCount(isShowFavorite: Bool = false) -> Int {
         return getPokemonList(isShowFavorite: isShowFavorite).count
+    }
+    
+    func updateFavoritePokemons() {
+        self.favoritePokemons = pokemons.compactMap { obj in
+            guard let realmObj = RealmManager.getPokemon(byID: obj.id), realmObj.isFavorite else {
+                return nil
+            }
+            return obj
+        }
     }
 }

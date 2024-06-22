@@ -12,5 +12,5 @@ struct HomePokemonListModel: Codable {
     let name: String
     let imageUrlStr: String
     let types: [String]
-    let isFavorite: Bool
+    var isFavorite: Bool
 }

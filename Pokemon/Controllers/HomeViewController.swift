@@ -64,6 +64,9 @@ class HomeViewController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
 //        flowLayout.sectionHeadersPinToVisibleBounds = true
+        flowLayout.minimumInteritemSpacing = 0
+        flowLayout.minimumLineSpacing = 0
+        flowLayout.sectionInset = .zero
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         // register cells
@@ -129,11 +132,12 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let realmObj = RealmManager.getPokemon(byID: obj.id)!
         let item = HomePokemonListModel(id: realmObj.pokemonID, name: realmObj.name, imageUrlStr: realmObj.spriteFrontUrl, types: Array(realmObj.types), isFavorite: realmObj.isFavorite)
         
-        if row == objs.count-1 {
+        if !isShowFavorite, row == objs.count-1 {
             pokemonListViewModel.loadData(isRefresh: false)
         }
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: isShowGrid ? HomePokemonGridCell.cellID : HomePokemonListCell.cellID, for: indexPath) as! HomePokemonCell
+        cell.delegate = self
         cell.setupWithItem(item: item)
         cell.loadDetailData(item: item)
         return cell
@@ -176,7 +180,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         let section = indexPath.section
         let width = collectionView.frame.width
         if isShowGrid {
-            return CGSize(width: width, height: 48*scale)
+            let itemsPerRow: CGFloat = 4
+            var cellWidth = floor(width/itemsPerRow)
+            return CGSize(width: cellWidth, height: cellWidth)
         } else {
             return CGSize(width: width, height: 48*scale)
         }
@@ -213,19 +219,23 @@ extension HomeViewController {
 extension HomeViewController: PokemonListViewModelProtocol {
     func updatePokemonListUI(loadMorePokemons: [PokemonListModel]) {
         print(#function)
-        if cv?.visibleCells.count ?? 0 == 0 || self.isShowFavorite {
+        if isShowFavorite {
             cv?.reloadData()
         } else {
-            cv?.performBatchUpdates({
-                let dataCount = pokemonListViewModel.getPokemonListCount(isShowFavorite: isShowFavorite)
-                let startIndex = dataCount - loadMorePokemons.count
-                var indexPathsToInsert = [IndexPath]()
-                for i in startIndex..<dataCount {
-                    let indexPath = IndexPath(item: i, section: 0)
-                    indexPathsToInsert.append(indexPath)
-                }
-                cv?.insertItems(at: indexPathsToInsert)
-            }, completion: nil)
+            if cv?.visibleCells.count ?? 0 == 0 {
+                cv?.reloadData()
+            } else {
+                cv?.performBatchUpdates({
+                    let dataCount = pokemonListViewModel.getPokemonListCount(isShowFavorite: isShowFavorite)
+                    let startIndex = dataCount - loadMorePokemons.count
+                    var indexPathsToInsert = [IndexPath]()
+                    for i in startIndex..<dataCount {
+                        let indexPath = IndexPath(item: i, section: 0)
+                        indexPathsToInsert.append(indexPath)
+                    }
+                    cv?.insertItems(at: indexPathsToInsert)
+                }, completion: nil)
+            }
         }
     }
 }
@@ -241,5 +251,28 @@ extension HomeViewController: PokemonDetailViewModelProtocol {
 }
 
 extension HomeViewController: HomeNavigationHeaderProtocol {
+    func showFavoriteSwitched(isFavorite: Bool) {
+        self.isShowFavorite = isFavorite
+        pokemonListViewModel.updateFavoritePokemons()
+        cv?.reloadData()
+    }
     
+    func listGridSwitched(isShowGrid: Bool) {
+        self.isShowGrid = isShowGrid
+        cv?.reloadData()
+    }
+}
+
+extension HomeViewController: HomePokemonCellProtocol {
+    func homePokemonCellFavoriteUpdated() {
+        if isShowFavorite {
+            pokemonListViewModel.updateFavoritePokemons()
+            if pokemonListViewModel.getPokemonList(isShowFavorite: isShowFavorite).count > 0 {
+                cv?.reloadData()
+            } else {
+                navigationHeader?.btnFavoriteTapped()
+                cv?.reloadData()
+            }
+        }
+    }
 }

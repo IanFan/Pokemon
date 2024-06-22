@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 protocol HomeNavigationHeaderProtocol: AnyObject {
+    func showFavoriteSwitched(isFavorite: Bool)
+    func listGridSwitched(isShowGrid: Bool)
 }
 
 class HomeNavigationHeader: UICollectionReusableView {
@@ -34,8 +36,8 @@ class HomeNavigationHeader: UICollectionReusableView {
     func setupUI() {
         backgroundColor = ColorFactory.white2
         
-        let btnFavorite = UIFactory.createImageButton(name: "", tintColor: .red)
-        let btnListGrid = UIFactory.createImageButton(name: "", tintColor: .black)
+        let btnFavorite = UIFactory.createImageButton(name: "", tintColor: ColorFactory.heartRed)
+        let btnListGrid = UIFactory.createImageButton(name: "", tintColor: ColorFactory.listGridBlue)
         
         self.btnFavorite = btnFavorite
         self.btnListGrid = btnListGrid
@@ -72,10 +74,22 @@ class HomeNavigationHeader: UICollectionReusableView {
     }
     
     @objc func btnFavoriteTapped() {
-        print(#function)
+        guard var item = self.item else {
+            return
+        }
+        let isShowFavorite = !item.isShowFavorite
+        item.isShowFavorite = isShowFavorite
+        setupWithItem(item: item)
+        self.delegate?.showFavoriteSwitched(isFavorite: isShowFavorite)
     }
     
     @objc func btnListGridTapped() {
-        print(#function)
+        guard var item = self.item else {
+            return
+        }
+        let isShowGrid = !item.isShowGrid
+        item.isShowGrid = isShowGrid
+        setupWithItem(item: item)
+        self.delegate?.listGridSwitched(isShowGrid: isShowGrid)
     }
 }

@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 struct ColorFactory {
+    static let heartRed = UIColor.red
+    static let listGridBlue = UIColor.blue
     static let appleGreen = UIColor(red: 121, green: 196, blue: 27)
     static let appleGreen40 = UIColor(red: 121, green: 196, blue: 27, alpha: 0.4)
     static let booger = UIColor(red: 166, green: 204, blue: 66)
