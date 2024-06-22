@@ -19,9 +19,10 @@ struct PokemonListModel: Codable {
     let url: String
     
     var id: Int {
-        guard let idString = url.split(separator: "/").last else {
+        guard let lastPathComponent = url.split(separator: "/").last else {
             return 0
         }
-        return Int(idString) ?? 0
+        let cleanedString = lastPathComponent.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        return Int(cleanedString) ?? 0
     }
 }

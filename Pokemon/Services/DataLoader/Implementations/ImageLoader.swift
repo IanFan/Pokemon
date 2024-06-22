@@ -1,16 +1,16 @@
 //
-//  PokemonLoader.swift
+//  ImageLoader.swift
 //  Pokemon
 //
-//  Created by Ian Fan on 2024/6/20.
+//  Created by Ian Fan on 2024/6/21.
 //
 
 import Foundation
 import UIKit
 
-struct PokemonListLoader: GenericSingleDataLoaderProtocol {
-    typealias Params = FileParams_pokemonList
-    typealias ResultType = PokemonListResponseModel
+struct ImageLoader: GenericSingleDataLoaderProtocol {
+    typealias Params = FileParams_file
+    typealias ResultType = UIImage
     
     func loadDataFromCache(params: Params) throws -> Result<ResultType, Error> {
         guard let resultParams = try loadCacheFile(params: params) else {
@@ -19,11 +19,10 @@ struct PokemonListLoader: GenericSingleDataLoaderProtocol {
         guard let data = resultParams.data else {
             return .failure(CacheError.cacheError)
         }
-        guard let model = try parse(params: DataParseParams_pokemonList(data: data)) else {
-            return .failure(ParseError.parseError)
+        guard let image = UIImage(data: data) else {
+            return .failure(ImageError.imageError)
         }
-        saveCacheModel(model: model)
-        return .success(model)
+        return .success(image)
     }
     
     func loadDataLocal(params: Params) throws -> Result<ResultType, Error> {
@@ -33,10 +32,10 @@ struct PokemonListLoader: GenericSingleDataLoaderProtocol {
         guard let data = resultParams.data else {
             return .failure(LoadLocalError.loadError)
         }
-        guard let model = try parse(params: DataParseParams_pokemonList(data: data)) else {
-            return .failure(ParseError.parseError)
+        guard let image = UIImage(data: data) else {
+            return .failure(ImageError.imageError)
         }
-        return .success(model)
+        return .success(image)
     }
     
     func loadDataOnline(params: Params) async throws -> Result<ResultType, Error> {
@@ -46,27 +45,25 @@ struct PokemonListLoader: GenericSingleDataLoaderProtocol {
         guard let data = resultParams.data else {
             return .failure(LoadError.loadError)
         }
-        guard let model = try parse(params: DataParseParams_pokemonList(data: data)) else {
-            return .failure(ParseError.parseError)
+        guard let image = UIImage(data: data) else {
+            return .failure(ImageError.imageError)
         }
-        saveCacheModel(model: model)
         let cacheSuccess = saveCacheFile(params: resultParams)
         if !cacheSuccess {
             print("Error cache onlind file")
         }
-        return .success(model)
+        return .success(image)
     }
     
     private func loadCacheFile(params: Params) throws -> Params? {
         var resultParams = params
         let key = params.cacheKey
         
-        if let data = JsonHelper().fetchJsonData(forKey: key) {
-            resultParams.data = data
-            return resultParams
-        } else {
+        guard let data = FileHelper.loadDataFromDisk(forKey: key) else {
             return nil
         }
+        resultParams.data = data
+        return resultParams
     }
     
     private func saveCacheFile(params: Params) -> Bool {
@@ -75,42 +72,16 @@ struct PokemonListLoader: GenericSingleDataLoaderProtocol {
         }
         let key = params.cacheKey
         
-        let saveInLocalResult = JsonHelper().storeJsonData(jsonData: data, forKey: key)
+        let saveInLocalResult = FileHelper.saveDataToDisk(data, forKey: key)
         return saveInLocalResult
     }
     
-    private func saveCacheModel(model: PokemonListResponseModel) {
-        guard let models = model.results else {
-            return
-        }
-        for pokemonListModel in models {
-            let id = pokemonListModel.id
-            let url = pokemonListModel.url
-            let name = pokemonListModel.name
-            DispatchQueue.main.async {
-                RealmManager.createPokemon(pokemonID: id, name: name, detailUrl: url)
-            }
-        }
-    }
-    
     private func loadLocalFile(params: Params) throws -> Params? {
-        /*
-        var resultParams = params
-        
-        if let path = Bundle.main.path(forResource: fileName, ofType: fileExt) {
-            let url = URL(fileURLWithPath: path)
-            if let data = try? Data(contentsOf: url) {
-                resultParams.data = data
-                return resultParams
-            }
-        }
-        */
-        
         return nil
     }
     
     private func loadOnlineFile(params: Params) async throws -> Params? {
-        let loader = LoadFileStrategy_pokemonList()
+        let loader = LoadFileStrategy_file()
         let result = try await loader.loadSingleFile(params: params)
         switch result {
         case .success(let resultParams):
@@ -119,22 +90,9 @@ struct PokemonListLoader: GenericSingleDataLoaderProtocol {
             return nil
         }
     }
-    
-    private func parse(params: DataParseParams) throws -> PokemonListResponseModel? {
-        switch params {
-        case let params as DataParseParams_pokemonList:
-            let parser = ParseStrategy_pokemonList()
-            guard let responseModel = parser.parseParams(params: params) else {
-                throw ParseError.parseError
-            }
-            return responseModel
-        default:
-            throw ParseError.parseError
-        }
-    }
 }
 
-extension PokemonListLoader {
+extension ImageLoader {
     func mockCacheLocalData(params: Params) -> Bool {
         do {
             if let resultParams = try loadLocalFile(params: params) {

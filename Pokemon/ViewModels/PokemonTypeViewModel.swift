@@ -16,8 +16,8 @@ class PokemonTypeViewModel: NSObject {
     weak var delegate: PokemonTypeViewModelProtocol?
     var pokemonTypeList = [PokemonTypeListModel]()
     var pokemonTypeDetailDic = [String: PokemonTypeDetailModel]() // [typeName: deailModel]
-    var pokemonNameTypeDic = [String: String]() // [pokemonNmae: typeName]
-    var pokemonIdTypeDic = [String: String]() // [pokemonId: typeName]
+    var pokemonNameTypeDic = [String: [String]]() // [pokemonNmae: typeName]
+    var pokemonIdTypeDic = [String: [String]]() // [pokemonId: typeName]
     var page = 0
     var isRequesting: Bool = false
     
@@ -143,8 +143,7 @@ class PokemonTypeViewModel: NSObject {
         let id = pokemonTypeList.id
         let params = FileParams_pokemonTypeDetail(name: name, id: id)
         let loader = GenericSingleDataLoader(dataLoader: PokemonTypeDetailLoader())
-        loader.loadData(params: params, completion: { [weak self] result in
-            guard let self = self else { return }
+        loader.loadData(params: params, completion: { result in
             switch result {
             case .success(let resultParams):
                 let obj = resultParams
@@ -161,18 +160,22 @@ class PokemonTypeViewModel: NSObject {
     }
     
     
-    private func mapToPokemonTypeDic(dic: [String: PokemonTypeDetailModel]) -> ([String: String], [String: String]) {
+    private func mapToPokemonTypeDic(dic: [String: PokemonTypeDetailModel]) -> ([String: [String]], [String: [String]]) {
         let startTime = Date()
         
-        var nameTypeDic = [String: String]()
-        var idTypeDic = [String: String]()
+        var nameTypeDic = [String: [String]]()
+        var idTypeDic = [String: [String]]()
         for (typeName, model) in dic {
             if let pokemon = model.pokemon {
                 for pokemonSlot in pokemon {
                     if let poke = pokemonSlot.pokemon, let pokeName = poke.name, let url = poke.url {
-                        nameTypeDic[pokeName] = typeName
+                        if !nameTypeDic[pokeName, default: [""]].contains(typeName) {
+                            nameTypeDic[pokeName, default: [""]].append(typeName)
+                        }
                         if let idString = url.split(separator: "/").last  {
-                            idTypeDic[String(idString)] = typeName
+                            if !idTypeDic[String(idString), default: [""]].contains(typeName) {
+                                idTypeDic[String(idString), default: [""]].append(typeName)
+                            }
                         }
                     }
                 }

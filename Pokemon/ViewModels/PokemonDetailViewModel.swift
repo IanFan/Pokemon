@@ -9,19 +9,33 @@ import Foundation
 import UIKit
 
 protocol PokemonDetailViewModelProtocol: AnyObject {
-    func updatePokemonDetailUI()
+    func updatePokemonDetailUI(pokemonDetailModel: PokemonDetailModel)
 }
 
 class PokemonDetailViewModel: NSObject {
     weak var delegate: PokemonDetailViewModelProtocol?
-    var pokemonDetailModel: PokemonDetailModel?
-    
     var successAction: (() -> Void)?
     var failAction: (() -> Void)?
+    var pokemonDetailModel: PokemonDetailModel?
+    var requestingQueue = [Int]()
     
-    func loadData(isRefresh: Bool = false, name: String, id: Int) {
-        loadData(isRefresh: isRefresh, name: name, id: id, completion: { result in
-            self.delegate?.updatePokemonDetailUI()
+    func loadData(isRefresh: Bool = false, id: Int, name: String) {
+        guard !requestingQueue.contains(id) else {
+            return
+        }
+        requestingQueue.append(id)
+        loadData(isRefresh: isRefresh, name: name, id: id, completion: { [weak self] result in
+            guard let self = self else { return }
+            self.requestingQueue = self.requestingQueue.filter { $0 != id }
+            switch result {
+            case .success(let resultParams):
+                DispatchQueue.main.async {
+                    let obj = resultParams
+                    self.delegate?.updatePokemonDetailUI(pokemonDetailModel: obj)
+                }
+            case .failure(let error):
+                break
+            }
         })
     }
     

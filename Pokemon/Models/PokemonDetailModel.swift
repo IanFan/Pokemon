@@ -8,21 +8,21 @@
 import Foundation
 
 struct PokemonDetailModel: Codable {
+    let id: Int
     let abilities: [AbilityInfo]?
     let base_experience: Int?
     let cries: Cries?
     let forms: [PokemonForm]?
     let game_indices: [GameIndex]?
     let height: Int?
-    let held_items: [String]?
-    let id: Int
+//    let held_items: [HeldItem]?
     let is_default: Bool?
     let location_area_encounters: String?
-    let moves: [Move]?
+//    let moves: [Move]?
     let name: String?
     let order: Int?
-    let past_abilities: [String]?
-    let past_types: [String]?
+//    let past_abilities: [String]?
+//    let past_types: [String]?
     let species: Species?
     let sprites: Sprites?
     let stats: [Stat]?
@@ -31,7 +31,7 @@ struct PokemonDetailModel: Codable {
 }
 
 struct AbilityInfo: Codable {
-    let ability: Ability
+    let ability: Ability?
     let is_hidden: Bool?
     let slot: Int?
 }
@@ -62,7 +62,7 @@ struct Version: Codable {
 }
 
 struct Move: Codable {
-    let move: MoveInfo
+    let move: MoveInfo?
     let version_group_details: [VersionGroupDetail]?
 }
 
@@ -357,6 +357,25 @@ struct PokemonType: Codable {
 struct TypeInfo: Codable {
     let name: String?
     let url: String?
+}
+
+struct PokemonItem: Codable {
+    let name: String
+    let url: String
+}
+
+struct PokemonVersionDetail: Codable {
+    let rarity: Int
+    let version: Version
+}
+
+struct HeldItem: Codable {
+    let item: PokemonItem
+    let versionDetails: [PokemonVersionDetail]
+
+    enum CodingKeys: String, CodingKey {
+        case item, versionDetails = "version_details"
+    }
 }
 
 

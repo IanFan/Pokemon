@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import RealmSwift
 
 struct PokemonDetailLoader: GenericSingleDataLoaderProtocol {
     typealias Params = FileParams_pokemonDetail
@@ -22,6 +23,7 @@ struct PokemonDetailLoader: GenericSingleDataLoaderProtocol {
         guard let model = try parse(params: DataParseParams_pokemonDetail(data: data)) else {
             return .failure(ParseError.parseError)
         }
+        saveCacheModel(model: model)
         return .success(model)
     }
     
@@ -48,6 +50,7 @@ struct PokemonDetailLoader: GenericSingleDataLoaderProtocol {
         guard let model = try parse(params: DataParseParams_pokemonDetail(data: data)) else {
             return .failure(ParseError.parseError)
         }
+        saveCacheModel(model: model)
         let cacheSuccess = saveCacheFile(params: resultParams)
         if !cacheSuccess {
             print("Error cache onlind file")
@@ -114,6 +117,19 @@ struct PokemonDetailLoader: GenericSingleDataLoaderProtocol {
             return responseModel
         default:
             throw ParseError.parseError
+        }
+    }
+    
+    private func saveCacheModel(model: PokemonDetailModel) {
+        guard let realObj = RealmManager.getPokemon(byID: model.id) else {
+            return
+        }
+        let realm = try! Realm()
+        try! realm.write {
+            realObj.spriteFrontUrl = model.sprites?.front_default ?? ""
+            realObj.types.removeAll()
+            realObj.types.append(objectsIn: model.types?.compactMap { $0.type?.name } ?? [])
+            realObj.isDetailDataFetched = true
         }
     }
 }

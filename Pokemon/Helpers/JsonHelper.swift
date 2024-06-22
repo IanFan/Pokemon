@@ -16,7 +16,7 @@ class JsonHelper {
     
     func storeJsonDic(json: [String: Any], forKey key: String) -> Bool {
         if let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) {
-            storeJsonData(jsonData: jsonData, forKey: key)
+            let _ = storeJsonData(jsonData: jsonData, forKey: key)
             return true
         } else {
             print("*** Error storeJson key:\(key)")

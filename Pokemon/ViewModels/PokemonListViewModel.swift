@@ -18,6 +18,7 @@ class PokemonListViewModel: NSObject {
     var loadMorePokemons = [PokemonListModel]()
     var page: Int = 0
     var isRequesting: Bool = false
+    var requestedEndData: Bool = false
     
     var successAction: (() -> Void)?
     var failAction: (() -> Void)?
@@ -25,11 +26,11 @@ class PokemonListViewModel: NSObject {
     func loadData(isRefresh: Bool = false) {
         loadData(isRefresh: isRefresh, completion: { result in
             switch result {
-            case .success(let resultParams):
+            case .success(let objs):
                 DispatchQueue.main.async {
-                    self.delegate?.updatePokemonListUI(loadMorePokemons: self.loadMorePokemons)
+                    self.delegate?.updatePokemonListUI(loadMorePokemons: objs)
                 }
-            case .failure(let error):
+            case .failure(_):
                 self.failAction?()
             }
         })
@@ -37,6 +38,9 @@ class PokemonListViewModel: NSObject {
     
     private func loadData(isRefresh: Bool = false, completion: @escaping (Result<[PokemonListModel], Error>) -> Void) {
         
+        guard !requestedEndData else {
+            return
+        }
         guard !isRequesting else {
             return
         }
@@ -60,6 +64,11 @@ class PokemonListViewModel: NSObject {
                     }
                     return
                 }
+                guard objs.count > 0 else {
+                    requestedEndData = true
+                    self.failAction?()
+                    return
+                }
                 let sortedObjs = self.sortPokemonObjs(objs: objs)
                 DispatchQueue.main.async {
                     self.loadMorePokemons = sortedObjs
@@ -81,8 +90,22 @@ class PokemonListViewModel: NSObject {
     private func sortPokemonObjs(objs: [PokemonListModel]) -> [PokemonListModel] {
         var objs = objs
         objs.sort {
-            ($0.id ?? 0) < ($1.id ?? 0)
+            ($0.id) < ($1.id)
         }
         return objs
+    }
+}
+
+extension PokemonListViewModel {
+    func getPokemonList(isShowFavorite: Bool = false) -> [PokemonListModel] {
+        if isShowFavorite {
+            return []
+        } else {
+            return pokemons
+        }
+    }
+    
+    func getPokemonListCount(isShowFavorite: Bool = false) -> Int {
+        return getPokemonList(isShowFavorite: isShowFavorite).count
     }
 }

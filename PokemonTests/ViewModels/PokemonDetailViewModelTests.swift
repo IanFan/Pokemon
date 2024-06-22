@@ -29,7 +29,7 @@ final class PokemonDetailViewModelTests: XCTestCase {
     func testLoadData() async throws {
         let expectation = self.expectation(description: "Async loadData")
         
-        viewModel.loadData(isRefresh: false, name: "bulbasaur", id: 1)
+        viewModel.loadData(isRefresh: false, id: 1, name: "bulbasaur")
         
         viewModel.successAction = {
             guard let viewModel = self.viewModel else {
@@ -56,7 +56,7 @@ final class PokemonDetailViewModelTests: XCTestCase {
         
         startTime = Date().timeIntervalSince1970
         
-        viewModel.loadData(isRefresh: false, name: "bulbasaur", id: 1)
+        viewModel.loadData(isRefresh: false, id: 1, name: "bulbasaur")
         
         viewModel.successAction = {
             endTime = Date().timeIntervalSince1970
