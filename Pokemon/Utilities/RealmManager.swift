@@ -104,3 +104,26 @@ class RealmManager {
         }
     }
 }
+
+extension RealmManager {
+    static func migration() {
+        let version : UInt64 = 1
+        let config = Realm.Configuration(
+            schemaVersion: version,
+            migrationBlock: { migration, oldSchemaVersion in
+                if (oldSchemaVersion < version) {
+                    migration.enumerateObjects(ofType: RealmPokemonModel.className()) { oldObject, newObject in
+//                        newObject!["newParameter"] = "defaultValue"
+                    }
+                }
+            })
+        
+        Realm.Configuration.defaultConfiguration = config
+        
+        do {
+            _ = try Realm()
+        } catch {
+            print("Error opening Realm: \(error)")
+        }
+    }
+}
