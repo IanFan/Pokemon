@@ -19,15 +19,55 @@ enum AppLanguage_Type {
     case in_localize
 }
 
-enum AppLanguage : String, CaseIterable {
+enum AppLanguage: String, CaseIterable {
     case English = "en"
+    case Arabic = "ar"
+    case Chinese_simplified = "zh-Hans"
     case Chinese_traditional = "zh-Hant"
+    case Czech = "cs"
+    case Danish = "da"
+    case Dutch = "nl"
+    case French = "fr"
+    case German = "de"
+    case Greek = "el"
+    case Hindi = "hi"
+    case Italian = "it"
+    case Japanese = "ja"
+    case Korean = "ko"
+    case Norwegian_bokmal = "nb"
+    case Polish = "pl"
+    case Portuguese = "pt-PT"
+    case Russian = "ru"
+    case Spanish = "es"
+    case Swedish = "sv"
+    case Thai = "th"
+    case Turkish = "tr"
     
     func convert2Str(type: AppLanguage_Type) -> String {
         var str = ""
         switch self {
         case .English: str = "English"
+        case .Arabic: str = "Arabic"
+        case .Chinese_simplified: str = "Simplified Chinese"
         case .Chinese_traditional: str = "Traditional Chinese"
+        case .Czech: str = "Czech"
+        case .Danish: str = "Danish"
+        case .Dutch: str = "Dutch"
+        case .French: str = "French"
+        case .German: str = "German"
+        case .Greek: str = "Greek"
+        case .Hindi: str = "Hindi"
+        case .Italian: str = "Italian"
+        case .Japanese: str = "Japanese"
+        case .Korean: str = "Korean"
+        case .Norwegian_bokmal: str = "Norwegian"
+        case .Polish: str = "Polish"
+        case .Portuguese: str = "Portuguese"
+        case .Russian: str = "Russian"
+        case .Spanish: str = "Spanish"
+        case .Swedish: str = "Swedish"
+        case .Thai: str = "Thai"
+        case .Turkish: str = "Turkish"
         }
         switch type {
         case .in_english:
@@ -35,7 +75,27 @@ enum AppLanguage : String, CaseIterable {
         case .in_language:
             switch self {
             case .English: str = "English"
+            case .Arabic: str = "عربي"
+            case .Chinese_simplified: str = "简体中文"
             case .Chinese_traditional: str = "繁體中文"
+            case .Czech: str = "čeština"
+            case .Danish: str = "Dansk sprog"
+            case .Dutch: str = "Nederlands"
+            case .French: str = "Français"
+            case .German: str = "Deutsch"
+            case .Greek: str = "Ελληνικά"
+            case .Hindi: str = "हिंदी"
+            case .Italian: str = "Italiano"
+            case .Japanese: str = "日本語"
+            case .Korean: str = "한국어"
+            case .Norwegian_bokmal: str = "norsk"
+            case .Polish: str = "Polski"
+            case .Portuguese: str = "Português"
+            case .Russian: str = "Русский"
+            case .Spanish: str = "Español"
+            case .Swedish: str = "svenska"
+            case .Thai: str = "แบบไทย"
+            case .Turkish: str = "Türkçe"
             }
         case .in_localize:
             str = str.localized().capitalized
@@ -44,9 +104,16 @@ enum AppLanguage : String, CaseIterable {
     }
 }
 
-enum GPTLanguage : String, CaseIterable {
+enum PokemonLanguage : String, CaseIterable {
     case English = "en"
-    case Chinese_traditional = "zh-TW"
+    case Chinese_traditional = "zh-Hant"
+    case Chinese_simplified = "zh-Hans"
+    case Japanese = "ja"
+    case French = "fr"
+    case German = "de"
+    case Iatalian = "it"
+    case Spanish = "es"
+    case Korean = "ko"
 }
 
 class LanguageManager: NSObject {
@@ -112,15 +179,24 @@ class LanguageManager: NSObject {
 }
 
 extension LanguageManager {
-    func getGPTLanuageEnum() -> GPTLanguage {
+    func getPokemonLanuageEnum() -> PokemonLanguage {
         let gptLanguageEnum = convertAppToGPTLanguage(self.languageEnum)
         return gptLanguageEnum
     }
     
-    func convertAppToGPTLanguage(_ language: AppLanguage) -> GPTLanguage {
+    func convertAppToGPTLanguage(_ language: AppLanguage) -> PokemonLanguage {
         switch language {
         case .English: return .English
         case .Chinese_traditional: return .Chinese_traditional
+        case .Chinese_simplified: return.Chinese_simplified
+        case .French: return .French
+        case .German: return .German
+        case .Italian: return .Iatalian
+        case .Japanese: return .Japanese
+        case .Korean: return .Korean
+        case .Spanish: return .Spanish
+        default:
+            return .English
         }
     }
 }

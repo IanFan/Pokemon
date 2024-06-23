@@ -62,11 +62,6 @@ struct TypeGameIndex: Codable {
     }
 }
 
-struct Generation: Codable {
-    let name: String?
-    let url: String?
-}
-
 struct MoveDamageClass: Codable {
     let name: String?
     let url: String?

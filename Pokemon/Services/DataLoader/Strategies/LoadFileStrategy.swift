@@ -96,6 +96,79 @@ class LoadFileStrategy_pokemonDetail: LoadFileStrategy {
     }
 }
 
+// MARK: - LOADER pokemonSpecies
+
+struct FileParams_pokemonSpecies: FileParams {
+    var api: String = "pokemon-species"
+    var name: String
+    var id: Int
+    var data: Data?
+    
+    var cacheKey: String {
+        return "PokemonSpecies_\(api)_\(id)"
+    }
+}
+
+class LoadFileStrategy_pokemonSpecies: LoadFileStrategy {
+    typealias Params = FileParams_pokemonSpecies
+    typealias ResultType = FileParams_pokemonSpecies
+    
+    func loadSingleFile(params: Params) async throws -> Result<ResultType, Error> {
+        let api = params.api
+        let name = params.name
+        
+        return await withCheckedContinuation { continuation in
+            let url = "\(RequestStruct.DOMAIN)/\(api)/\(name)"
+            RequestManager.shared.httpGet(url: url, parameters: nil, httpClosure: { data, response, error in
+                if let data = data {
+                    var resultParams = params
+                    resultParams.data = data
+                    continuation.resume(returning: .success(resultParams))
+                } else {
+                    let error = NSError(domain: "RequestError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Request failed or no data"])
+                    continuation.resume(returning: .failure(error))
+                }
+            })
+        }
+    }
+}
+
+// MARK: - LOADER pokemonEvolutionChain
+
+struct FileParams_pokemonEvolutionChain: FileParams {
+    var api: String = "evolution-chain"
+    var id: Int
+    var data: Data?
+    
+    var cacheKey: String {
+        return "PokemonSpecies_\(api)_\(id)"
+    }
+}
+
+class LoadFileStrategy_pokemonEvolutionChain: LoadFileStrategy {
+    typealias Params = FileParams_pokemonEvolutionChain
+    typealias ResultType = FileParams_pokemonEvolutionChain
+    
+    func loadSingleFile(params: Params) async throws -> Result<ResultType, Error> {
+        let api = params.api
+        let id = params.id
+        
+        return await withCheckedContinuation { continuation in
+            let url = "\(RequestStruct.DOMAIN)/\(api)/\(id)"
+            RequestManager.shared.httpGet(url: url, parameters: nil, httpClosure: { data, response, error in
+                if let data = data {
+                    var resultParams = params
+                    resultParams.data = data
+                    continuation.resume(returning: .success(resultParams))
+                } else {
+                    let error = NSError(domain: "RequestError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Request failed or no data"])
+                    continuation.resume(returning: .failure(error))
+                }
+            })
+        }
+    }
+}
+
 // MARK: - LOADER pokemonTypeList
 
 struct FileParams_pokemonTypeList: FileParams {

@@ -65,6 +65,54 @@ class ParseStrategy_pokemonDetail: ParseStrategy {
     }
 }
 
+// MARK: - PARSER PokemonSpecies
+struct DataParseParams_pokemonSpecies: DataParseParams {
+    var data: Data
+}
+
+class ParseStrategy_pokemonSpecies: ParseStrategy {
+    typealias DataParseParams = DataParseParams_pokemonSpecies
+    typealias ResultType = PokemonSpeciesModel
+    
+    func parseParams(params: DataParseParams_pokemonSpecies) -> PokemonSpeciesModel? {
+        let data = params.data
+        
+        let parser = PokemonSpeciesParser()
+        let result = parser.parse(data: data)
+        
+        switch result {
+        case .success(let response):
+            return response
+        case .failure(_):
+            return nil
+        }
+    }
+}
+
+// MARK: - PARSER PokemonEvolutionChain
+struct DataParseParams_pokemonEvolutionChain: DataParseParams {
+    var data: Data
+}
+
+class ParseStrategy_pokemonEvolutionChain: ParseStrategy {
+    typealias DataParseParams = DataParseParams_pokemonEvolutionChain
+    typealias ResultType = PokemonEvolutionChainModel
+    
+    func parseParams(params: DataParseParams_pokemonEvolutionChain) -> PokemonEvolutionChainModel? {
+        let data = params.data
+        
+        let parser = PokemonEvolutionChainParser()
+        let result = parser.parse(data: data)
+        
+        switch result {
+        case .success(let response):
+            return response
+        case .failure(_):
+            return nil
+        }
+    }
+}
+
 // MARK: - PARSER PokemonTypeList
 struct DataParseParams_pokemonTypeList: DataParseParams {
     var data: Data

@@ -34,6 +34,9 @@ class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        pokemonListViewModel.delegate = self
+        pokemonDetailViewModel.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -49,10 +52,8 @@ class HomeViewController: UIViewController {
         
         RealmManager.deleteAllPokemon()
         
-        pokemonListViewModel.delegate = self
-        pokemonDetailViewModel.delegate = self
-        
         setupUI()
+        setupSubscribers()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.requestAPIs(isRefresh: false)
@@ -60,6 +61,8 @@ class HomeViewController: UIViewController {
     }
     
     func setupUI() {
+        self.view.backgroundColor = ColorFactory.white2
+        
         // collectionView
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -103,8 +106,17 @@ class HomeViewController: UIViewController {
     
     func requestAPIs(isRefresh: Bool) {
         pokemonListViewModel.loadData(isRefresh: isRefresh)
-//        pokemonDetailViewModel.loadData(name: "bulbasaur", id: 1)
-//        pokemonTypeViewModel.loadData(isRefresh: isRefresh)
+    }
+}
+
+extension HomeViewController {
+    func setupSubscribers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDataUpdated), name: .dataUpdatedNotification, object: nil)
+    }
+    
+    @objc func handleDataUpdated() {
+        pokemonListViewModel.updateFavoritePokemons()
+        cv?.reloadData()
     }
 }
 
@@ -145,15 +157,26 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectSectionIndex = indexPath.section
-        let selectIndex = indexPath.item
-        print("select:\(indexPath.section) \(indexPath.row)")
+        let section = indexPath.section
+        let row = indexPath.item
+        print("select:\(section) \(row)")
         
         guard let cell = collectionView.cellForItem(at: indexPath) as? HomePokemonCell, let item: HomePokemonListModel = cell.item else {
             return
         }
-        
-        
+        guard let realmObj = RealmManager.getPokemon(byID: item.id) else {
+            return
+        }
+        if realmObj.isDetailDataFetched {
+            let vc = DetailViewController(pokemonDetailViewModel: pokemonDetailViewModel, homeListModel: item)
+            self.navigationController?.pushViewController(vc, animated: true)
+        } else {
+            pokemonDetailViewModel.loadData(isRefresh: false, id: item.id, name: item.name)
+            pokemonDetailViewModel.successAction = {
+                let vc = DetailViewController(pokemonDetailViewModel: self.pokemonDetailViewModel, homeListModel: item)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
