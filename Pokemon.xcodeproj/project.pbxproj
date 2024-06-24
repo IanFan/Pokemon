@@ -293,7 +293,7 @@
 			isa = PBXGroup;
 			children = (
 				A4B4EC8F2C2549D500C9EDCE /* ViewModels */,
-				A4B4EC902C2549DF00C9EDCE /* ServicesTests */,
+				A4B4EC902C2549DF00C9EDCE /* Services */,
 			);
 			path = PokemonTests;
 			sourceTree = "<group>";
@@ -504,12 +504,12 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		A4B4EC902C2549DF00C9EDCE /* ServicesTests */ = {
+		A4B4EC902C2549DF00C9EDCE /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				A4B4EC912C2549E900C9EDCE /* DataLoader */,
 			);
-			path = ServicesTests;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		A4B4EC912C2549E900C9EDCE /* DataLoader */ = {
