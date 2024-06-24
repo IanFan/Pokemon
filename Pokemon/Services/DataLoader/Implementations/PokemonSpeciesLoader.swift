@@ -121,14 +121,16 @@ struct PokemonSpeciesLoader: GenericSingleDataLoaderProtocol {
     }
     
     private func saveCacheModel(model: PokemonSpeciesModel) {
-        guard let realObj = RealmManager.getPokemon(byID: model.id) else {
-            return
-        }
-        let realm = try! Realm()
-        try! realm.write {
-            realObj.evolutionChainUrl = model.evolution_chain?.url ?? ""
-            realObj.evolutionChainID = model.evolution_chain?.id ?? 0
-            realObj.isSpeciesDataFetched = true
+        DispatchQueue.main.async {
+            guard let realObj = RealmManager.getPokemon(byID: model.id) else {
+                return
+            }
+            let realm = try! Realm()
+            try! realm.write {
+                realObj.evolutionChainUrl = model.evolution_chain?.url ?? ""
+                realObj.evolutionChainID = model.evolution_chain?.id ?? 0
+                realObj.isSpeciesDataFetched = true
+            }
         }
     }
 }

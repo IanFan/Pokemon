@@ -88,6 +88,7 @@
 		A4B4ECF22C281F5800C9EDCE /* PokemonEvolutionChainParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECF12C281F5800C9EDCE /* PokemonEvolutionChainParserTests.swift */; };
 		A4B4ECF42C28383300C9EDCE /* NotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECF32C28383300C9EDCE /* NotificationHelper.swift */; };
 		A4B4ECF62C290B5900C9EDCE /* evolution_chain.json in Resources */ = {isa = PBXBuildFile; fileRef = A4B4ECF52C290B5900C9EDCE /* evolution_chain.json */; };
+		A4B4ECF82C2939BE00C9EDCE /* AnimationHelper_pbn10.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECF72C2939BE00C9EDCE /* AnimationHelper_pbn10.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -215,6 +216,7 @@
 		A4B4ECF12C281F5800C9EDCE /* PokemonEvolutionChainParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonEvolutionChainParserTests.swift; sourceTree = "<group>"; };
 		A4B4ECF32C28383300C9EDCE /* NotificationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHelper.swift; sourceTree = "<group>"; };
 		A4B4ECF52C290B5900C9EDCE /* evolution_chain.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = evolution_chain.json; sourceTree = "<group>"; };
+		A4B4ECF72C2939BE00C9EDCE /* AnimationHelper_pbn10.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationHelper_pbn10.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -378,9 +380,10 @@
 		A4B4EC392C240D7400C9EDCE /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				A4B4EC4F2C24118600C9EDCE /* UIFactory.swift */,
 				A4B4EC4B2C24115E00C9EDCE /* FontFactory.swift */,
 				A4B4EC4D2C24117600C9EDCE /* ColorFactory.swift */,
-				A4B4EC4F2C24118600C9EDCE /* UIFactory.swift */,
+				A4B4ECF72C2939BE00C9EDCE /* AnimationHelper_pbn10.swift */,
 				A4B4EC512C24119B00C9EDCE /* LanguageManager.swift */,
 				A4B4ECC42C266B7F00C9EDCE /* RealmManager.swift */,
 			);
@@ -716,6 +719,7 @@
 				A4B4EC702C241F1300C9EDCE /* PokemonListLoader.swift in Sources */,
 				A4B4EC502C24118600C9EDCE /* UIFactory.swift in Sources */,
 				A4B4ECAB2C259D6700C9EDCE /* HomePokemonGridCell.swift in Sources */,
+				A4B4ECF82C2939BE00C9EDCE /* AnimationHelper_pbn10.swift in Sources */,
 				A4B4ECC32C266A8E00C9EDCE /* RealmPokemonModel.swift in Sources */,
 				A4B4EC8C2C252DAA00C9EDCE /* PokemonTypeListParser.swift in Sources */,
 				A4B4ECD82C27E9A200C9EDCE /* DetailViewController.swift in Sources */,

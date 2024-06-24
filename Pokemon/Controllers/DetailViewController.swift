@@ -119,7 +119,7 @@ class DetailViewController: UIViewController {
         }
         
         // infoView
-        let infoView = DetailInfoView(frame: .zero, item: homeListModel)
+        let infoView = DetailInfoView()
         view.addSubview(infoView)
         self.infoView = infoView
         infoView.translatesAutoresizingMaskIntoConstraints = false
@@ -148,6 +148,7 @@ class DetailViewController: UIViewController {
         let evolutionView = DetailEvolutionView()
         evolutionView.axis = .vertical
         evolutionView.spacing = 0
+        evolutionView.delegate = self
         self.evolutionView = evolutionView
         mainStackView.addArrangedSubview(evolutionView)
         
@@ -166,16 +167,6 @@ class DetailViewController: UIViewController {
     @objc func btnBackTapped() {
         self.navigationController?.popViewController(animated: true)
     }
-    
-    func requestAPIs(isRefresh: Bool) {
-        let pokemonId = homeListModel.id
-        let name = homeListModel.name
-        guard let realmPokemon = RealmManager.getPokemon(byID: pokemonId) else {
-            return
-        }
-        
-        pokemonSpeciesViewModel.loadData(isRefresh: isRefresh, id: pokemonId, name: name)
-    }
 }
 
 extension DetailViewController {
@@ -189,6 +180,13 @@ extension DetailViewController {
 }
 
 extension DetailViewController {
+    func requestAPIs(isRefresh: Bool) {
+        let pokemonId = homeListModel.id
+        let name = homeListModel.name
+        
+        pokemonDetailViewModel.loadData(isRefresh: false, id: pokemonId, name: name)
+    }
+    
     @objc func handleRefresh() {
         requestAPIs(isRefresh: true)
         self.refreshControl?.endRefreshing()
@@ -197,7 +195,13 @@ extension DetailViewController {
 
 extension DetailViewController: PokemonDetailViewModelProtocol {
     func updatePokemonDetailUI(pokemonDetailModel: PokemonDetailModel) {
+        guard let realmObj = RealmManager.getPokemon(byID: pokemonDetailModel.id) else {
+            return
+        }
+        let item = HomePokemonListModel(id: realmObj.pokemonID, name: realmObj.name, imageUrlStr: realmObj.spriteFrontUrl, types: Array(realmObj.types), isFavorite: realmObj.isFavorite)
+        infoView.setupContent(item: item)
         
+        pokemonSpeciesViewModel.loadData(isRefresh: false, id: realmObj.pokemonID, name: realmObj.name)
     }
 }
 
@@ -213,7 +217,23 @@ extension DetailViewController: PokemonSpeciesViewModelProtocol {
 }
 
 extension DetailViewController: PokemonEvolutionChainViewModelProtocol {
-    func updatePokemonEvolutionChainUI(pokemonEvolutionChainModel: PokemonEvolutionChainModel, speciesList: [PokemonSpecies]) {
-        evolutionView?.setupContent(items: speciesList)
+    func updatePokemonEvolutionChainUI(pokemonEvolutionChainModel: PokemonEvolutionChainModel, speciesList: [[PokemonSpecies]]) {
+        evolutionView?.setupContent(itemsList: speciesList)
+    }
+}
+
+extension DetailViewController: DetailEvolutionViewProtocol {
+    func detailEvolutionViewTapped(pokemonSpecies: PokemonSpecies) {
+        let id = pokemonSpecies.speciesId
+        guard let name = pokemonSpecies.name else {
+            return
+        }
+        var isFavorite = false
+        if let realmObj = RealmManager.getPokemon(byID: id) {
+            isFavorite = realmObj.isFavorite
+        }
+        let item = HomePokemonListModel(id: id, name: name, imageUrlStr: "", types: [], isFavorite: isFavorite)
+        let vc = DetailViewController(pokemonDetailViewModel: pokemonDetailViewModel, homeListModel: item)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }

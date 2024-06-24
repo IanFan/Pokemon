@@ -22,11 +22,9 @@ class DetailInfoView: UIView {
     
     var btnFavoriteAction: (() -> Void)?
     
-    init(frame: CGRect, item: HomePokemonListModel) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        self.item = item
         setupViews()
-        setupContent(item: self.item)
     }
     
     required init?(coder: NSCoder) {
@@ -34,10 +32,12 @@ class DetailInfoView: UIView {
     }
     
     private func setupViews() {
+        self.alpha = 0
+        
         let ivSprite = UIFactory.createImage(name: "")
-        let lbId = UIFactory.createLabel(size: 16*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
-        let lbName = UIFactory.createLabel(size: 16*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
-        let lbTypes = UIFactory.createLabel(size: 16*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
+        let lbId = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
+        let lbName = UIFactory.createLabel(size: 18*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
+        let lbTypes = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
         let btnFavorite = UIFactory.createImageButton(name: "", tintColor: ColorFactory.heartRed)
         
         self.ivSprite = ivSprite
@@ -89,8 +89,8 @@ class DetailInfoView: UIView {
         btnFavorite.snp.makeConstraints { make in
             make.centerY.equalTo(snp.centerY)
             make.trailing.equalTo(snp.trailing).offset(-margin)
-            make.width.equalTo(44*scale)
-            make.height.equalTo(44*scale)
+            make.width.equalTo(36*scale)
+            make.height.equalTo(36*scale)
         }
     }
     
@@ -109,6 +109,8 @@ class DetailInfoView: UIView {
         }
         
         updateFavoriteUI()
+        
+        AnimationFactory.fadeIn(self)
     }
     
     func updateFavoriteUI() {

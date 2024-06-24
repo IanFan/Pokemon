@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol PokemonEvolutionChainViewModelProtocol: AnyObject {
-    func updatePokemonEvolutionChainUI(pokemonEvolutionChainModel: PokemonEvolutionChainModel, speciesList: [PokemonSpecies])
+    func updatePokemonEvolutionChainUI(pokemonEvolutionChainModel: PokemonEvolutionChainModel, speciesList: [[PokemonSpecies]])
 }
 
 class PokemonEvolutionChainViewModel: NSObject {
@@ -17,7 +17,7 @@ class PokemonEvolutionChainViewModel: NSObject {
     var successAction: (() -> Void)?
     var failAction: (() -> Void)?
     var pokemonEvolutionChainModel: PokemonEvolutionChainModel?
-    var speciesList = [PokemonSpecies]()
+    var speciesList = [[PokemonSpecies]]()
     
     func loadData(isRefresh: Bool = false, id: Int) {
         loadData(isRefresh: isRefresh, id: id, completion: { [weak self] result in
@@ -34,7 +34,7 @@ class PokemonEvolutionChainViewModel: NSObject {
         })
     }
     
-    private func loadData(isRefresh: Bool = false, id: Int, completion: @escaping (Result<(PokemonEvolutionChainModel, [PokemonSpecies]), Error>) -> Void) {
+    private func loadData(isRefresh: Bool = false, id: Int, completion: @escaping (Result<(PokemonEvolutionChainModel, [[PokemonSpecies]]), Error>) -> Void) {
         
         let params = FileParams_pokemonEvolutionChain(id: id)
         let loader = GenericSingleDataLoader(dataLoader: PokemonEvolutionChainLoader())
@@ -60,22 +60,24 @@ class PokemonEvolutionChainViewModel: NSObject {
         })
     }
     
-    private func getChainSpeciesList(model: PokemonEvolutionChainModel) -> [PokemonSpecies] {
-        var ans = [PokemonSpecies]()
+    private func getChainSpeciesList(model: PokemonEvolutionChainModel) -> [[PokemonSpecies]] {
+        var ans = [[PokemonSpecies]]()
         var chains = [PokemonChainLink]()
         if let chain = model.chain {
             chains.append(chain)
         }
         while !chains.isEmpty {
             var tmpChains = [PokemonChainLink]()
+            var tmpSpecies = [PokemonSpecies]()
             for chain in chains {
                 if let species = chain.species, let name = species.name, let url = species.url {
                     if let evolves_to = chain.evolves_to, !evolves_to.isEmpty {
                         tmpChains.append(contentsOf: evolves_to)
                     }
-                    ans.append(species)
+                    tmpSpecies.append(species)
                 }
             }
+            ans.append(tmpSpecies)
             chains = tmpChains
         }
         return ans

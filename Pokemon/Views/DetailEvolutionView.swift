@@ -9,9 +9,14 @@ import Foundation
 import UIKit
 import SnapKit
 
+protocol DetailEvolutionViewProtocol: AnyObject {
+    func detailEvolutionViewTapped(pokemonSpecies: PokemonSpecies)
+}
+
 class DetailEvolutionView: UIStackView {
     let scale: CGFloat = UIFactory.getScale()
-    var items: [PokemonSpecies]!
+    weak var delegate: DetailEvolutionViewProtocol?
+    var itemsList: [[PokemonSpecies]]!
     
     var evolotionViews = [EvolutionView]()
     var lbTitle: UILabel!
@@ -26,37 +31,41 @@ class DetailEvolutionView: UIStackView {
     }
     
     private func setupViews() {
-        
+        self.alpha = 0
     }
     
-    func setupContent(items: [PokemonSpecies]) {
-        guard !items.isEmpty, evolotionViews.isEmpty else {
+    func setupContent(itemsList: [[PokemonSpecies]]) {
+        guard !itemsList.isEmpty, evolotionViews.isEmpty else {
             return
         }
-        self.items = items
+        self.itemsList = itemsList
         
         let margin = 20*scale
         let itemInset = 10*scale
         
-        let lbTitle = UIFactory.createLabel(size: 16*scale, text: "Evolution Chain".localized(), color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
+        let lbTitle = UIFactory.createLabel(size: 18*scale, text: "Evolution Chain".localized(), color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
         addSubview(lbTitle)
         lbTitle.snp.makeConstraints { make in
-            make.top.equalTo(snp.top).offset(10*scale)
+            make.top.equalTo(snp.top).offset(itemInset)
             make.leading.equalTo(snp.leading).offset(margin)
             make.trailing.equalTo(snp.trailing).offset(-margin)
         }
         lbTitle.textAlignment = .center
         self.addArrangedSubview(lbTitle)
         
-        for i in 0..<items.count {
-            let item = items[i]
-            let v = EvolutionView()
-            v.translatesAutoresizingMaskIntoConstraints = false
-            v.setupContent(item: item)
-            evolotionViews.append(v)
-            self.addArrangedSubview(v)
+        for i in 0..<itemsList.count {
+            let items = itemsList[i]
+            for j in 0..<items.count {
+                let item = items[j]
+                let v = EvolutionView()
+                v.translatesAutoresizingMaskIntoConstraints = false
+                v.setupContent(item: item)
+                v.delegate = self
+                evolotionViews.append(v)
+                self.addArrangedSubview(v)
+            }
             
-            if i != items.count-1 {
+            if i != itemsList.count-1 {
                 let ivArrow = UIFactory.createImage(name: "arrow.down", tintColor: ColorFactory.greyishBrown)
                 ivArrow.contentMode = .scaleAspectFit
                 addSubview(ivArrow)
@@ -68,11 +77,25 @@ class DetailEvolutionView: UIStackView {
                 self.addArrangedSubview(ivArrow)
             }
         }
+        
+        AnimationFactory.fadeIn(self)
     }
+}
+
+extension DetailEvolutionView: EvolutionViewProtocol {
+    func btnEvolutionTapped(item: PokemonSpecies) {
+        self.delegate?.detailEvolutionViewTapped(pokemonSpecies: item)
+    }
+}
+
+
+protocol EvolutionViewProtocol: AnyObject {
+    func btnEvolutionTapped(item: PokemonSpecies)
 }
 
 class EvolutionView: UIView {
     let scale: CGFloat = UIFactory.getScale()
+    weak var delegate: EvolutionViewProtocol?
     var item: PokemonSpecies!
     
     var btnEvolution: UIButton!
@@ -87,14 +110,16 @@ class EvolutionView: UIView {
     }
     
     private func setupViews() {
-        let btnEvolution = UIFactory.createTextButton(size: 18*scale, text: "", textColor: ColorFactory.white2, bgColor: ColorFactory.greyishBrown, font: .PingFangTCRegular, corner: 15*scale)
+        let btnEvolution = UIFactory.createTextButton(size: 16*scale, text: "", textColor: ColorFactory.white2, bgColor: ColorFactory.greyishBrown, font: .PingFangTCRegular, corner: 15*scale)
         
         self.btnEvolution = btnEvolution
         
         addSubview(btnEvolution)
         
+        btnEvolution.addTarget(self, action: #selector(btnEvolutionTapped), for: .touchUpInside)
+        
         let margin = 10*scale
-        let itemInset = 10*scale
+//        let itemInset = 10*scale
         
         self.snp.makeConstraints { make in
             make.height.equalTo(btnEvolution.snp.height).offset(2*margin)
@@ -111,7 +136,12 @@ class EvolutionView: UIView {
     func setupContent(item: PokemonSpecies) {
         self.item = item
         
-        let name = item.name
+        let name = item.name?.capitalized
         btnEvolution?.setTitle(name, for: .normal)
+    }
+    
+    @objc func btnEvolutionTapped() {
+        guard let item = item else {return}
+        self.delegate?.btnEvolutionTapped(item: item)
     }
 }

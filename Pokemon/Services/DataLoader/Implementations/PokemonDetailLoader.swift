@@ -121,15 +121,16 @@ struct PokemonDetailLoader: GenericSingleDataLoaderProtocol {
     }
     
     private func saveCacheModel(model: PokemonDetailModel) {
-        guard let realObj = RealmManager.getPokemon(byID: model.id) else {
-            return
-        }
-        let realm = try! Realm()
-        try! realm.write {
-            realObj.spriteFrontUrl = model.sprites?.front_default ?? ""
-            realObj.types.removeAll()
-            realObj.types.append(objectsIn: model.types?.compactMap { $0.type?.name } ?? [])
-            realObj.isDetailDataFetched = true
+        DispatchQueue.main.async {
+            let realObj = RealmManager.getOrCreatePokemon(byID: model.id)
+            let realm = try! Realm()
+            try! realm.write {
+                realObj.name = model.name ?? ""
+                realObj.spriteFrontUrl = model.sprites?.front_default ?? ""
+                realObj.types.removeAll()
+                realObj.types.append(objectsIn: model.types?.compactMap { $0.type?.name } ?? [])
+                realObj.isDetailDataFetched = true
+            }
         }
     }
 }

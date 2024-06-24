@@ -164,19 +164,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         guard let cell = collectionView.cellForItem(at: indexPath) as? HomePokemonCell, let item: HomePokemonListModel = cell.item else {
             return
         }
-        guard let realmObj = RealmManager.getPokemon(byID: item.id) else {
-            return
-        }
-        if realmObj.isDetailDataFetched {
-            let vc = DetailViewController(pokemonDetailViewModel: pokemonDetailViewModel, homeListModel: item)
-            self.navigationController?.pushViewController(vc, animated: true)
-        } else {
-            pokemonDetailViewModel.loadData(isRefresh: false, id: item.id, name: item.name)
-            pokemonDetailViewModel.successAction = {
-                let vc = DetailViewController(pokemonDetailViewModel: self.pokemonDetailViewModel, homeListModel: item)
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
-        }
+        
+        let vc = DetailViewController(pokemonDetailViewModel: pokemonDetailViewModel, homeListModel: item)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -241,7 +231,6 @@ extension HomeViewController {
 
 extension HomeViewController: PokemonListViewModelProtocol {
     func updatePokemonListUI(loadMorePokemons: [PokemonListModel]) {
-        print(#function)
         if isShowFavorite {
             cv?.reloadData()
         } else {

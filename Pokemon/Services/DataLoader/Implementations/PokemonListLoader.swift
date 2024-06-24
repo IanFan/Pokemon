@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import RealmSwift
 
 struct PokemonListLoader: GenericSingleDataLoaderProtocol {
     typealias Params = FileParams_pokemonList
@@ -83,12 +84,24 @@ struct PokemonListLoader: GenericSingleDataLoaderProtocol {
         guard let models = model.results else {
             return
         }
-        for pokemonListModel in models {
-            let id = pokemonListModel.id
-            let url = pokemonListModel.url
-            let name = pokemonListModel.name
-            DispatchQueue.main.async {
-                RealmManager.createPokemon(pokemonID: id, name: name, detailUrl: url)
+//        for pokemonListModel in models {
+//            let id = pokemonListModel.id
+//            if !RealmManager.isPokemonExist(byID: id) {
+//                let url = pokemonListModel.url
+//                let realmPokemonMoel = RealmManager.getOrCreatePokemon(byID: id)
+//                realmPokemonMoel.name = pokemonListModel.name
+//                realmPokemonMoel.detailUrl = url
+//                RealmManager.createOrUpdatePokemon(pokemon: realmPokemonMoel)
+//            }
+//        }
+        DispatchQueue.main.async {
+            for pokemonListModel in models {
+                let realObj = RealmManager.getOrCreatePokemon(byID: pokemonListModel.id)
+                let realm = try! Realm()
+                try! realm.write {
+                    realObj.name = pokemonListModel.name
+                    realObj.detailUrl = pokemonListModel.url
+                }
             }
         }
     }

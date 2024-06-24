@@ -26,7 +26,7 @@ class DetailFlavorView: UIView {
     }
     
     private func setupViews() {
-        let lbTitle = UIFactory.createLabel(size: 16*scale, text: "Flavor".localized(), color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
+        let lbTitle = UIFactory.createLabel(size: 18*scale, text: "Flavor".localized(), color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
         let lbFlavor = UIFactory.createLabel(size: 16*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
         
         self.lbTitle = lbTitle
@@ -36,6 +36,7 @@ class DetailFlavorView: UIView {
         addSubview(lbFlavor)
         
         lbTitle.textAlignment = .center
+        lbTitle.alpha = 0
         
         lbFlavor.numberOfLines = 0
         lbFlavor.textAlignment = .center
@@ -80,8 +81,11 @@ class DetailFlavorView: UIView {
         }
         
         if !flavorTextList.isEmpty {
-            lbFlavor.alpha = 1
             lbFlavor?.text = flavorTextList[0]
+            if let lbTitle = lbTitle, let lbFlavor = lbFlavor {
+                AnimationFactory.fadeIn(lbTitle)
+                AnimationFactory.fadeIn(lbFlavor)
+            }
         }
     }
 }

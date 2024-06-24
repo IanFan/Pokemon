@@ -73,9 +73,14 @@ class RealmManager {
         if let model = getPokemon(byID: pokemonID) {
             return model
         } else {
-            let model = RealmPokemonModel()
-            model.pokemonID = pokemonID
-            return model
+            let newPokemon = RealmPokemonModel()
+            newPokemon.pokemonID = pokemonID
+            
+            try! realm.write {
+                realm.add(newPokemon)
+            }
+            
+            return newPokemon
         }
     }
     
