@@ -50,7 +50,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        RealmManager.deleteAllPokemon()
+        self.view.accessibilityIdentifier = "HomeView"
         
         setupUI()
         setupSubscribers()

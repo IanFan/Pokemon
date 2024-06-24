@@ -61,6 +61,8 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.accessibilityIdentifier = "DetailView"
+        
         setupUI()
         setupSubscribers()
         
