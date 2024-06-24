@@ -69,13 +69,12 @@ class HomePokemonListCell: HomePokemonCell {
     }
     
     func setupUI() {
-//        contentView.backgroundColor = ColorFactory.white2
-        
         let ivSprite = UIFactory.createImage(name: "")
         let lbId = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
-        let lbName = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
+        let lbName = UIFactory.createLabel(size: 18*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
         let lbTypes = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
         let btnFavorite = UIFactory.createImageButton(name: "", tintColor: ColorFactory.heartRed)
+        let vSeperate = UIFactory.createView(color: .black.withAlphaComponent(0.1))
         
         self.ivSprite = ivSprite
         self.lbId = lbId
@@ -88,6 +87,7 @@ class HomePokemonListCell: HomePokemonCell {
         contentView.addSubview(lbName)
         contentView.addSubview(lbTypes)
         contentView.addSubview(btnFavorite)
+        contentView.addSubview(vSeperate)
         
         ivSprite.contentMode = .scaleAspectFit
         
@@ -99,45 +99,49 @@ class HomePokemonListCell: HomePokemonCell {
         ivSprite.snp.makeConstraints { make in
             make.centerY.equalTo(contentView.snp.centerY)
             make.leading.equalTo(contentView.snp.leading).offset(margin)
-            make.width.equalTo(44*scale)
-            make.height.equalTo(44*scale)
+            make.width.equalTo(80*scale)
+            make.height.equalTo(80*scale)
         }
         
         lbId.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top).offset(2*scale)
+            make.bottom.equalTo(lbName.snp.top)
             make.leading.equalTo(ivSprite.snp.trailing).offset(itemInset)
             make.trailing.equalTo(btnFavorite.snp.leading).offset(-itemInset)
-            make.height.equalTo(15*scale)
         }
         
         lbName.snp.makeConstraints { make in
-            make.top.equalTo(lbId.snp.bottom).offset(0*scale)
+            make.centerY.equalTo(contentView.snp.centerY)
             make.leading.equalTo(lbId.snp.leading)
             make.trailing.equalTo(lbId.snp.trailing)
-            make.height.equalTo(15*scale)
         }
         
         lbTypes.snp.makeConstraints { make in
-            make.top.equalTo(lbName.snp.bottom).offset(0*scale)
+            make.top.equalTo(lbName.snp.bottom)
             make.leading.equalTo(lbId.snp.leading)
             make.trailing.equalTo(lbId.snp.trailing)
-            make.height.equalTo(15*scale)
         }
         
         btnFavorite.snp.makeConstraints { make in
             make.centerY.equalTo(contentView.snp.centerY)
             make.trailing.equalTo(contentView.snp.trailing).offset(-margin)
-            make.width.equalTo(44*scale)
-            make.height.equalTo(44*scale)
+            make.width.equalTo(36*scale)
+            make.height.equalTo(36*scale)
+        }
+        
+        vSeperate.snp.makeConstraints { make in
+            make.bottom.equalTo(contentView.snp.bottom).offset(-1)
+            make.leading.equalTo(contentView.snp.leading).offset(100*scale)
+            make.trailing.equalTo(contentView.snp.trailing).offset(-margin)
+            make.height.equalTo(1)
         }
     }
     
     override func setupWithItem(item: HomePokemonListModel) {
         self.item = item
         
-        lbName?.text = item.name
+        lbName?.text = item.name.capitalized
         lbId?.text = item.idStr
-        lbTypes?.text = item.types.joined(separator: ", ")
+        lbTypes?.text = item.types.map { $0.capitalized }.joined(separator: ", ")
         
         ivSprite?.image = nil
         if let ivSprite = self.ivSprite, !item.imageUrlStr.isEmpty {

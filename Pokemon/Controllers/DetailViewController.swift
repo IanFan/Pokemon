@@ -45,7 +45,7 @@ class DetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
         pokemonDetailViewModel?.delegate = self
         pokemonSpeciesViewModel.delegate = self
     }
@@ -112,7 +112,7 @@ class DetailViewController: UIViewController {
         contentView.addSubview(mainStackView)
         
         mainStackView.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top)
+            make.top.equalTo(contentView.snp.top).offset(55*scale)
             make.bottom.equalTo(contentView.snp.bottom)
             make.leading.equalTo(contentView.snp.leading)
             make.trailing.equalTo(contentView.snp.trailing)
@@ -150,6 +150,21 @@ class DetailViewController: UIViewController {
         evolutionView.spacing = 0
         self.evolutionView = evolutionView
         mainStackView.addArrangedSubview(evolutionView)
+        
+        // btnBack
+        let btnBack = UIFactory.createImageButton(name: "chevron.backward.circle.fill", tintColor: ColorFactory.hotpink)
+        view.addSubview(btnBack)
+        btnBack.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10*scale)
+            make.leading.equalTo(view.snp.leading).offset(10*scale)
+            make.width.equalTo(44*scale)
+            make.height.equalTo(44*scale)
+        }
+        btnBack.addTarget(self, action: #selector(btnBackTapped), for: .touchUpInside)
+    }
+    
+    @objc func btnBackTapped() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func requestAPIs(isRefresh: Bool) {
@@ -175,6 +190,7 @@ extension DetailViewController {
 
 extension DetailViewController {
     @objc func handleRefresh() {
+        requestAPIs(isRefresh: true)
         self.refreshControl?.endRefreshing()
     }
 }

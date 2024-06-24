@@ -29,12 +29,10 @@ class HomePokemonGridCell: HomePokemonCell {
     }
     
     func setupUI() {
-        contentView.backgroundColor = ColorFactory.white2
-        
         let ivSprite = UIFactory.createImage(name: "")
-        let lbId = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
+        let lbId = UIFactory.createLabel(size: 12*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
         let lbName = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
-        let lbTypes = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
+        let lbTypes = UIFactory.createLabel(size: 12*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
         let btnFavorite = UIFactory.createImageButton(name: "", tintColor: ColorFactory.heartRed)
         
         self.ivSprite = ivSprite
@@ -50,52 +48,82 @@ class HomePokemonGridCell: HomePokemonCell {
         contentView.addSubview(btnFavorite)
         
         ivSprite.contentMode = .scaleAspectFit
+        lbId.textAlignment = .center
+        lbName.textAlignment = .center
+        lbTypes.textAlignment = .center
         
         btnFavorite.addTarget(self, action: #selector(btnFavoriteTapped), for: .touchUpInside)
         
-        let margin = 20*scale
-        let itemInset = 15*scale
-        NSLayoutConstraint.activate([
-            ivSprite.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            ivSprite.leadingAnchor.constraint(equalTo: ivSprite.leadingAnchor, constant: margin),
-            ivSprite.widthAnchor.constraint(equalToConstant: 44*scale),
-            ivSprite.heightAnchor.constraint(equalToConstant: 44*scale),
-            
-            lbId.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2*scale),
-            lbId.leadingAnchor.constraint(equalTo: ivSprite.trailingAnchor, constant: itemInset),
-            lbId.trailingAnchor.constraint(equalTo: btnFavorite.leadingAnchor, constant: -itemInset),
-            lbId.heightAnchor.constraint(equalToConstant: 15*scale),
-            
-            lbName.topAnchor.constraint(equalTo: lbId.bottomAnchor, constant: 0*scale),
-            lbName.leadingAnchor.constraint(equalTo: lbId.leadingAnchor),
-            lbName.trailingAnchor.constraint(equalTo: lbId.trailingAnchor),
-            lbName.heightAnchor.constraint(equalToConstant: 15*scale),
-            
-            lbTypes.topAnchor.constraint(equalTo: lbName.bottomAnchor, constant: 0*scale),
-            lbTypes.leadingAnchor.constraint(equalTo: lbName.leadingAnchor),
-            lbTypes.trailingAnchor.constraint(equalTo: lbName.trailingAnchor),
-            lbTypes.heightAnchor.constraint(equalToConstant: 15*scale),
-            
-            btnFavorite.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            btnFavorite.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -margin),
-            btnFavorite.widthAnchor.constraint(equalToConstant: 44*scale),
-            btnFavorite.heightAnchor.constraint(equalToConstant: 44*scale),
-        ])
+        let margin = 10*scale
+        let itemInset = 5*scale
+        
+        ivSprite.snp.makeConstraints { make in
+            make.centerX.equalTo(contentView.snp.centerX)
+            make.top.equalTo(contentView.snp.top).offset(margin)
+            make.width.equalTo(contentView.snp.width).offset(-2*margin)
+            make.height.equalTo(contentView.snp.width).offset(-2*margin)
+        }
+        
+        lbId.snp.makeConstraints { make in
+            make.top.equalTo(ivSprite.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+        }
+        
+        lbName.snp.makeConstraints { make in
+            make.top.equalTo(lbId.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+        }
+        
+        lbTypes.snp.makeConstraints { make in
+            make.top.equalTo(lbName.snp.bottom)
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+        }
+        
+        btnFavorite.snp.makeConstraints { make in
+            make.top.equalTo(lbTypes.snp.bottom).offset(itemInset)
+            make.centerX.equalTo(contentView.snp.centerX)
+            make.width.equalTo(26*scale)
+            make.height.equalTo(26*scale)
+        }
     }
     
     override func setupWithItem(item: HomePokemonListModel) {
         self.item = item
         
-        lbName?.text = item.name
-        lbId?.text = String(item.id)
-        lbTypes?.text = item.types.joined(separator: ", ")
+        lbName?.text = item.name.capitalized
+        lbId?.text = item.idStr
+        lbTypes?.text = item.types.map { $0.capitalized }.joined(separator: ", ")
         
+        ivSprite?.image = nil
         if let ivSprite = self.ivSprite, !item.imageUrlStr.isEmpty {
             imageLoader.downloadImage(iv: ivSprite, urlStr: item.imageUrlStr)
+        } else {
+            print()
         }
+        
+        updateFavoriteUI()
+    }
+    
+    func updateFavoriteUI() {
+        guard let item = self.item else {
+            return
+        }
+        btnFavorite?.setBackgroundImage(UIFactory.getImage(named: item.isFavorite ? "heart.fill" : "heart"), for: .normal)
     }
     
     @objc func btnFavoriteTapped() {
-        
+        print(#function)
+        guard var item = self.item else {
+            return
+        }
+        let isFavorite = !item.isFavorite
+        item.isFavorite = isFavorite
+        RealmManager.updatePokemonFavorite(pokemonID: item.id, isFavorite: isFavorite)
+        self.item = item
+        updateFavoriteUI()
+        self.delegate?.homePokemonCellFavoriteUpdated()
     }
 }

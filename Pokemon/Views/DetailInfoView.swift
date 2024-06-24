@@ -97,9 +97,9 @@ class DetailInfoView: UIView {
     func setupContent(item: HomePokemonListModel) {
         self.item = item
         
-        lbName?.text = item.name
+        lbName?.text = item.name.capitalized
         lbId?.text = item.idStr
-        lbTypes?.text = item.types.joined(separator: ", ")
+        lbTypes?.text = item.types.map{ $0.capitalized }.joined(separator: ", ")
         
         ivSprite?.image = nil
         if let ivSprite = self.ivSprite, !item.imageUrlStr.isEmpty {

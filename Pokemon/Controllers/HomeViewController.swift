@@ -205,9 +205,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         if isShowGrid {
             let itemsPerRow: CGFloat = 4
             var cellWidth = floor(width/itemsPerRow)
-            return CGSize(width: cellWidth, height: cellWidth)
+            return CGSize(width: cellWidth, height: cellWidth+80*scale)
         } else {
-            return CGSize(width: width, height: 48*scale)
+            return CGSize(width: width, height: 90*scale)
         }
     }
     

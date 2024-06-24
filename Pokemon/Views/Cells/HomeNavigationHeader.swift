@@ -36,8 +36,8 @@ class HomeNavigationHeader: UICollectionReusableView {
     func setupUI() {
         backgroundColor = ColorFactory.white2
         
-        let btnFavorite = UIFactory.createImageButton(name: "", tintColor: ColorFactory.heartRed)
-        let btnListGrid = UIFactory.createImageButton(name: "", tintColor: ColorFactory.listGridBlue)
+        let btnFavorite = UIFactory.createImageButton(name: "", tintColor: ColorFactory.hotpink)
+        let btnListGrid = UIFactory.createImageButton(name: "", tintColor: ColorFactory.hotpink)
         
         self.btnFavorite = btnFavorite
         self.btnListGrid = btnListGrid
