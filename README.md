@@ -8,7 +8,7 @@ The Pokemon Project is an iOS application designed to display a list of Pokémon
 
 ## Features
 
-Home View: Displays a list or grid of Pokémon. Users can refresh the data by pulling down.
+Home View: Displays a list or grid of Pokémon.
 Detail View: Shows detailed information about a Pokémon, including basic info, species, and evolution chain.
 Favorite Functionality: Users can favorite their preferred Pokémon and view them in a dedicated favorites view.
 Interface Switching: Supports switching between list and grid views.
@@ -16,49 +16,42 @@ Interface Switching: Supports switching between list and grid views.
 
 ## Structure and Design Pattern
 
-In this MVVM architecture, the data loader component is implemented using the Dependency Inversion Principle (DIP) and the Strategy pattern.
+The Swift project follows a structured approach integrating MVVM architecture for clear separation of Models, Views, and ViewModels like PokemonListViewModel for data management. It employs Dependency Inversion Principle and Strategy pattern in the data loader for flexibility, alongside a protocol-delegate pattern in views for modular code. Supporting utilities, services, and helpers enhance functionality, ensuring efficient data handling and UI management throughout the application.
 
+### MVVM
+Models: 
+    This typically includes your data structures and models that represent the data the app works with.
 
-## Main Files
+Views: 
+    These are the visual elements and components that users interact with. The protocol-delegate pattern in a custom view to simplify communication with its containing view controller.
 
-### HomeViewController.swift
-HomeViewController is the main view controller responsible for displaying the Pokémon list or grid and handling user interactions.
+ViewModels: 
+    PokemonListViewModel: Manages the list of Pokémon, handling fetching from a data source.
+    PokemonDetailViewModel: Provides detailed information about a Pokémon.
+    PokemonSpeciesViewModel: Handles data specific to Pokémon species.
+    PokemonEvolutionChainViewModel: Manages the evolution chain for a Pokémon.
+    PokemonTypeViewModel: Deals with Pokémon types.
+    DownloadImageViewModel: Manages the downloading and caching of images used in the app.
 
-#### Key Properties
+Controllers: 
+    Responsible for managing the flow of the application and responding to user input.
 
-pokemonListViewModel: ViewModel managing the Pokémon list data.
-pokemonDetailViewModel: ViewModel managing the Pokémon detail data.
-cv: UICollectionView for displaying the Pokémon list or grid.
-navigationView: Custom navigation view for switching views and favorites.
+Services: 
+    Handles loading data from various sources (like network requests or local storage).
 
-#### Key Methods
+Utilities:
+    UIFactory: Provides methods to create UI components programmatically.
+    FontFactory: Manages and provides access to fonts used in the app.
+    ColorFactory: Centralizes color management and access.
+    AnimationHelper: Assists with animations and transitions.
+    LanguageManager: Handles localization and language-specific configurations.
+    RealmManager: Manages interactions with the Realm database.
 
-setupUI(): Initializes the user interface.
-requestAPIs(isRefresh: Bool): Requests Pokémon list data.
-setupSubscribers(): Sets up notification subscribers.
-refreshCollectionView(_ sender: UIRefreshControl): Handles pull-to-refresh action.
-updatePokemonListUI(loadMorePokemons: [PokemonListModel]): Updates the Pokémon list UI.
-showFavoriteSwitched(isFavorite: Bool): Handles the switching of the favorite view.
-listGridSwitched(isShowGrid: Bool): Handles the switching between list and grid views.
+Helpers: 
+    JsonHelper provides utility functions for working with JSON data.
 
-### DetailViewController.swift
-DetailViewController is the detail view controller responsible for displaying detailed information about a Pokémon, including basic info, species, and evolution chain.
-
-#### Key Properties
-
-pokemonDetailViewModel: ViewModel managing the Pokémon detail data.
-pokemonSpeciesViewModel: ViewModel managing the Pokémon species data.
-pokemonEvolutionChainViewModel: ViewModel managing the Pokémon evolution chain data.
-homeListModel: Pokémon data model passed from the home view.
-
-#### Key Methods
-
-setupUI(): Initializes the user interface.
-setupSubscribers(): Sets up notification subscribers.
-requestAPIs(isRefresh: Bool): Requests Pokémon detail data.
-updatePokemonDetailUI(pokemonDetailModel: PokemonDetailModel): Updates the Pokémon detail UI.
-updatePokemonSpeciesUI(pokemonSpeciesModel: PokemonSpeciesModel): Updates the Pokémon species UI.
-updatePokemonEvolutionChainUI(pokemonEvolutionChainModel: PokemonEvolutionChainModel, speciesList: [[PokemonSpecies]]): Updates the Pokémon evolution chain UI.
+Extensions: 
+    Additional functionalities or enhancements for existing Swift types, often used to extend their capabilities.
 
 
 ## Usage
