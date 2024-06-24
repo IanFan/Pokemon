@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
     let cellID = "cellID"
     var cv: UICollectionView!
     var refreshControl: UIRefreshControl!
-    var navigationHeader: HomeNavigationHeader?
+    var navigationView: HomeNavigationView?
     var isShowFavorite: Bool = false
     var isShowGrid: Bool = false
     
@@ -63,6 +63,22 @@ class HomeViewController: UIViewController {
     func setupUI() {
         self.view.backgroundColor = ColorFactory.white2
         
+        // navigationView
+        let navigationView = HomeNavigationView()
+        navigationView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(navigationView)
+        navigationView.delegate = self
+        let item = HomeNavigationModel(isShowFavorite: isShowFavorite, isShowGrid: isShowGrid)
+        navigationView.setupWithItem(item: item)
+        self.navigationView = navigationView
+        
+        navigationView.snp.makeConstraints { make in
+            make.leading.equalTo(view.snp.leading)
+            make.trailing.equalTo(view.snp.trailing)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.height.equalTo(50*scale)
+        }
+        
         // collectionView
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -77,7 +93,7 @@ class HomeViewController: UIViewController {
         cv.register(HomePokemonListCell.self, forCellWithReuseIdentifier: HomePokemonListCell.cellID)
         cv.register(HomePokemonGridCell.self, forCellWithReuseIdentifier: HomePokemonGridCell.cellID)
         //register headers
-        cv.register(HomeNavigationHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeNavigationHeader.headerID)
+//        cv.register(HomeHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeHeader.headerID)
         //register footers
 //        cv.register(HomeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HomeFooter.footerID)
         cv.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIFactory.isPad() ? 0*scale : 0*scale, right: 0)
@@ -88,18 +104,16 @@ class HomeViewController: UIViewController {
         view.addSubview(cv)
         self.cv = cv
         
-        // pull refresh
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = ColorFactory.greyishBrown
         refreshControl.addTarget(self, action: #selector(refreshCollectionView(_:)), for: .valueChanged)
         cv.refreshControl = refreshControl
         self.refreshControl = refreshControl
         
-        // layout
         cv.snp.makeConstraints { make in
             make.leading.equalTo(view.snp.leading)
             make.trailing.equalTo(view.snp.trailing)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.top.equalTo(navigationView.snp.bottom)
             make.bottom.equalTo(view.snp.bottom)
         }
     }
@@ -170,14 +184,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        // header
         if kind == UICollectionView.elementKindSectionHeader {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HomeNavigationHeader.headerID, for: indexPath) as! HomeNavigationHeader
-            header.delegate = self
-            let item = HomeNavigationModel(isShowFavorite: isShowFavorite, isShowGrid: isShowGrid)
-            header.setupWithItem(item: item)
-            self.navigationHeader = header
-            return header
+            return UICollectionReusableView()
         } else if kind == UICollectionView.elementKindSectionFooter {
             return UICollectionReusableView()
         } else {
@@ -210,8 +218,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let width = collectionView.frame.width
-        return CGSize(width: width, height: 50*scale)
+//        let width = collectionView.frame.width
+        return .zero
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
@@ -262,7 +270,7 @@ extension HomeViewController: PokemonDetailViewModelProtocol {
     }
 }
 
-extension HomeViewController: HomeNavigationHeaderProtocol {
+extension HomeViewController: HomeNavigationViewProtocol {
     func showFavoriteSwitched(isFavorite: Bool) {
         self.isShowFavorite = isFavorite
         pokemonListViewModel.updateFavoritePokemons()
@@ -282,7 +290,7 @@ extension HomeViewController: HomePokemonCellProtocol {
             if pokemonListViewModel.getPokemonList(isShowFavorite: isShowFavorite).count > 0 {
                 cv?.reloadData()
             } else {
-                navigationHeader?.btnFavoriteTapped()
+                navigationView?.btnFavoriteTapped()
                 cv?.reloadData()
             }
         }

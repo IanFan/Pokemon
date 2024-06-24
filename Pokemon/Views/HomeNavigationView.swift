@@ -8,15 +8,13 @@
 import Foundation
 import UIKit
 
-protocol HomeNavigationHeaderProtocol: AnyObject {
+protocol HomeNavigationViewProtocol: AnyObject {
     func showFavoriteSwitched(isFavorite: Bool)
     func listGridSwitched(isShowGrid: Bool)
 }
 
-class HomeNavigationHeader: UICollectionReusableView {
-    static let headerID = "HomeNavigationHeader"
-
-    weak var delegate: HomeNavigationHeaderProtocol?
+class HomeNavigationView: UIView {
+    weak var delegate: HomeNavigationViewProtocol?
     let scale: CGFloat = UIFactory.getScale()
     
     var item: HomeNavigationModel?

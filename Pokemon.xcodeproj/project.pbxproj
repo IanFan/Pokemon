@@ -59,7 +59,7 @@
 		A4B4ECA02C2566FE00C9EDCE /* PokemonListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4EC9F2C2566FE00C9EDCE /* PokemonListViewModelTests.swift */; };
 		A4B4ECA22C25670700C9EDCE /* PokemonDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECA12C25670700C9EDCE /* PokemonDetailViewModelTests.swift */; };
 		A4B4ECA42C25671200C9EDCE /* PokemonTypeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECA32C25671200C9EDCE /* PokemonTypeViewModelTests.swift */; };
-		A4B4ECA72C259D2E00C9EDCE /* HomeNavigationHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECA62C259D2E00C9EDCE /* HomeNavigationHeader.swift */; };
+		A4B4ECA72C259D2E00C9EDCE /* HomeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECA62C259D2E00C9EDCE /* HomeNavigationView.swift */; };
 		A4B4ECA92C259D5600C9EDCE /* HomePokemonListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECA82C259D5600C9EDCE /* HomePokemonListCell.swift */; };
 		A4B4ECAB2C259D6700C9EDCE /* HomePokemonGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECAA2C259D6700C9EDCE /* HomePokemonGridCell.swift */; };
 		A4B4ECAD2C25A03700C9EDCE /* HomeNavigationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECAC2C25A03700C9EDCE /* HomeNavigationModel.swift */; };
@@ -190,7 +190,7 @@
 		A4B4EC9F2C2566FE00C9EDCE /* PokemonListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonListViewModelTests.swift; sourceTree = "<group>"; };
 		A4B4ECA12C25670700C9EDCE /* PokemonDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailViewModelTests.swift; sourceTree = "<group>"; };
 		A4B4ECA32C25671200C9EDCE /* PokemonTypeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTypeViewModelTests.swift; sourceTree = "<group>"; };
-		A4B4ECA62C259D2E00C9EDCE /* HomeNavigationHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationHeader.swift; sourceTree = "<group>"; };
+		A4B4ECA62C259D2E00C9EDCE /* HomeNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationView.swift; sourceTree = "<group>"; };
 		A4B4ECA82C259D5600C9EDCE /* HomePokemonListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePokemonListCell.swift; sourceTree = "<group>"; };
 		A4B4ECAA2C259D6700C9EDCE /* HomePokemonGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePokemonGridCell.swift; sourceTree = "<group>"; };
 		A4B4ECAC2C25A03700C9EDCE /* HomeNavigationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationModel.swift; sourceTree = "<group>"; };
@@ -350,6 +350,7 @@
 			isa = PBXGroup;
 			children = (
 				A4B4ECA52C259D0100C9EDCE /* Cells */,
+				A4B4ECA62C259D2E00C9EDCE /* HomeNavigationView.swift */,
 				A4B4ECD92C27F1D000C9EDCE /* DetailInfoView.swift */,
 				A4B4ECDD2C27F1F700C9EDCE /* DetailFlavorView.swift */,
 				A4B4ECDB2C27F1E400C9EDCE /* DetailEvolutionView.swift */,
@@ -538,7 +539,6 @@
 		A4B4ECA52C259D0100C9EDCE /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				A4B4ECA62C259D2E00C9EDCE /* HomeNavigationHeader.swift */,
 				A4B4ECA82C259D5600C9EDCE /* HomePokemonListCell.swift */,
 				A4B4ECAA2C259D6700C9EDCE /* HomePokemonGridCell.swift */,
 			);
@@ -723,7 +723,7 @@
 				A4B4ECC32C266A8E00C9EDCE /* RealmPokemonModel.swift in Sources */,
 				A4B4EC8C2C252DAA00C9EDCE /* PokemonTypeListParser.swift in Sources */,
 				A4B4ECD82C27E9A200C9EDCE /* DetailViewController.swift in Sources */,
-				A4B4ECA72C259D2E00C9EDCE /* HomeNavigationHeader.swift in Sources */,
+				A4B4ECA72C259D2E00C9EDCE /* HomeNavigationView.swift in Sources */,
 				A4B4ECE02C27F33B00C9EDCE /* PokemonSpeciesViewModel.swift in Sources */,
 				A4B4EC642C241D9000C9EDCE /* PokemonListParser.swift in Sources */,
 				A4B4EC4C2C24115E00C9EDCE /* FontFactory.swift in Sources */,

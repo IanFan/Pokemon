@@ -68,18 +68,21 @@ class HomePokemonGridCell: HomePokemonCell {
             make.top.equalTo(ivSprite.snp.bottom)
             make.leading.equalTo(contentView.snp.leading)
             make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(15*scale)
         }
         
         lbName.snp.makeConstraints { make in
             make.top.equalTo(lbId.snp.bottom)
             make.leading.equalTo(contentView.snp.leading)
             make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(17*scale)
         }
         
         lbTypes.snp.makeConstraints { make in
             make.top.equalTo(lbName.snp.bottom)
             make.leading.equalTo(contentView.snp.leading)
             make.trailing.equalTo(contentView.snp.trailing)
+            make.height.equalTo(15*scale)
         }
         
         btnFavorite.snp.makeConstraints { make in
