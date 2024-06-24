@@ -73,7 +73,7 @@ class DetailInfoView: UIView {
         }
         
         lbName.snp.makeConstraints { make in
-            make.center.equalTo(snp.center)
+            make.centerY.equalTo(snp.centerY)
             make.leading.equalTo(lbId.snp.leading)
             make.trailing.equalTo(lbId.snp.trailing)
             make.height.equalTo(20*scale)
@@ -104,8 +104,6 @@ class DetailInfoView: UIView {
         ivSprite?.image = nil
         if let ivSprite = self.ivSprite, !item.imageUrlStr.isEmpty {
             imageLoader.downloadImage(iv: ivSprite, urlStr: item.imageUrlStr)
-        } else {
-            print()
         }
         
         updateFavoriteUI()

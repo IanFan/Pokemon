@@ -103,8 +103,6 @@ class HomePokemonGridCell: HomePokemonCell {
         ivSprite?.image = nil
         if let ivSprite = self.ivSprite, !item.imageUrlStr.isEmpty {
             imageLoader.downloadImage(iv: ivSprite, urlStr: item.imageUrlStr)
-        } else {
-            print()
         }
         
         updateFavoriteUI()
@@ -118,7 +116,6 @@ class HomePokemonGridCell: HomePokemonCell {
     }
     
     @objc func btnFavoriteTapped() {
-        print(#function)
         guard var item = self.item else {
             return
         }

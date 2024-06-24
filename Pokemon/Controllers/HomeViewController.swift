@@ -129,8 +129,7 @@ extension HomeViewController {
     }
     
     @objc func handleDataUpdated() {
-        pokemonListViewModel.updateFavoritePokemons()
-        cv?.reloadData()
+        handleUpdateFavorite()
     }
 }
 
@@ -151,9 +150,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         let objs = pokemonListViewModel.getPokemonList(isShowFavorite: isShowFavorite)
         let obj = objs[row]
-        if obj.id == 0 {
-            print()
-        }
         
         let realmObj = RealmManager.getPokemon(byID: obj.id)!
         let item = HomePokemonListModel(id: realmObj.pokemonID, name: realmObj.name, imageUrlStr: realmObj.spriteFrontUrl, types: Array(realmObj.types), isFavorite: realmObj.isFavorite)
@@ -262,7 +258,6 @@ extension HomeViewController: PokemonListViewModelProtocol {
 
 extension HomeViewController: PokemonDetailViewModelProtocol {
     func updatePokemonDetailUI(pokemonDetailModel: PokemonDetailModel) {
-//        print(#function)
         guard let cv = self.cv,
               let realObj = RealmManager.getPokemon(byID: pokemonDetailModel.id) else {
             return
@@ -285,6 +280,10 @@ extension HomeViewController: HomeNavigationViewProtocol {
 
 extension HomeViewController: HomePokemonCellProtocol {
     func homePokemonCellFavoriteUpdated() {
+        handleUpdateFavorite()
+    }
+    
+    func handleUpdateFavorite() {
         if isShowFavorite {
             pokemonListViewModel.updateFavoritePokemons()
             if pokemonListViewModel.getPokemonList(isShowFavorite: isShowFavorite).count > 0 {

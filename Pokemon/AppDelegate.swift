@@ -94,6 +94,5 @@ extension AppDelegate {
         }
         
         print("fontFileNames count: \(fontFileNames.count), fontScriptName count: \(dic.keys.count)")
-        print()
     }
 }

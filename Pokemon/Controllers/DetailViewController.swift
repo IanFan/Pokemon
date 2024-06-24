@@ -209,7 +209,6 @@ extension DetailViewController: PokemonDetailViewModelProtocol {
 
 extension DetailViewController: PokemonSpeciesViewModelProtocol {
     func updatePokemonSpeciesUI(pokemonSpeciesModel: PokemonSpeciesModel) {
-        print("updatePokemonSpeciesUI")
         flavorView.setupContent(item: pokemonSpeciesModel)
         
         if let evolutionChainId = pokemonSpeciesViewModel.getEvolutionChainId() {
