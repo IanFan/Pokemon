@@ -11,7 +11,7 @@ import SnapKit
 
 class DetailViewController: UIViewController {
     let scale: CGFloat = UIFactory.getScale()
-    var pokemonDetailViewModel: PokemonDetailViewModel!
+    var pokemonDetailViewModel = PokemonDetailViewModel()
     let pokemonSpeciesViewModel = PokemonSpeciesViewModel()
     let pokemonEvolutionChainViewModel = PokemonEvolutionChainViewModel()
     var homeListModel: HomePokemonListModel!
@@ -20,6 +20,7 @@ class DetailViewController: UIViewController {
     var infoView: DetailInfoView!
     var flavorView: DetailFlavorView!
     var evolutionView: DetailEvolutionView!
+    var indicator: UIActivityIndicatorView!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
@@ -30,11 +31,9 @@ class DetailViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    init(pokemonDetailViewModel: PokemonDetailViewModel, homeListModel: HomePokemonListModel) {
+    init(homeListModel: HomePokemonListModel) {
         super.init(nibName: nil, bundle: nil)
-        self.pokemonDetailViewModel = pokemonDetailViewModel
-        pokemonDetailViewModel.delegate = self
-        pokemonEvolutionChainViewModel.delegate = self
+        
         self.homeListModel = homeListModel
     }
     
@@ -46,8 +45,9 @@ class DetailViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: false)
-        pokemonDetailViewModel?.delegate = self
+        pokemonDetailViewModel.delegate = self
         pokemonSpeciesViewModel.delegate = self
+        pokemonEvolutionChainViewModel.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -164,6 +164,15 @@ class DetailViewController: UIViewController {
             make.height.equalTo(44*scale)
         }
         btnBack.addTarget(self, action: #selector(btnBackTapped), for: .touchUpInside)
+        
+        // indicator
+        let indicator = UIFactory.createIndicator(style: .medium, color: ColorFactory.greyishBrown)
+        view.addSubview(indicator)
+        self.indicator = indicator
+        indicator.startAnimating()
+        indicator.snp.makeConstraints { make in
+            make.center.equalTo(view.snp.center)
+        }
     }
     
     @objc func btnBackTapped() {
@@ -197,6 +206,8 @@ extension DetailViewController {
 
 extension DetailViewController: PokemonDetailViewModelProtocol {
     func updatePokemonDetailUI(pokemonDetailModel: PokemonDetailModel) {
+        indicator?.stopAnimating()
+        
         guard let realmObj = RealmManager.getPokemon(byID: pokemonDetailModel.id) else {
             return
         }
@@ -234,7 +245,7 @@ extension DetailViewController: DetailEvolutionViewProtocol {
             isFavorite = realmObj.isFavorite
         }
         let item = HomePokemonListModel(id: id, name: name, imageUrlStr: "", types: [], isFavorite: isFavorite)
-        let vc = DetailViewController(pokemonDetailViewModel: pokemonDetailViewModel, homeListModel: item)
+        let vc = DetailViewController(homeListModel: item)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

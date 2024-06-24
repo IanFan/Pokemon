@@ -18,7 +18,8 @@ class HomeViewController: UIViewController {
     let cellID = "cellID"
     var cv: UICollectionView!
     var refreshControl: UIRefreshControl!
-    var navigationView: HomeNavigationView?
+    var navigationView: HomeNavigationView!
+    var indicator: UIActivityIndicatorView!
     var isShowFavorite: Bool = false
     var isShowGrid: Bool = false
     
@@ -116,6 +117,15 @@ class HomeViewController: UIViewController {
             make.top.equalTo(navigationView.snp.bottom)
             make.bottom.equalTo(view.snp.bottom)
         }
+        
+        // indicator
+        let indicator = UIFactory.createIndicator(style: .medium, color: ColorFactory.greyishBrown)
+        view.addSubview(indicator)
+        self.indicator = indicator
+        indicator.startAnimating()
+        indicator.snp.makeConstraints { make in
+            make.center.equalTo(view.snp.center)
+        }
     }
     
     func requestAPIs(isRefresh: Bool) {
@@ -175,7 +185,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return
         }
         
-        let vc = DetailViewController(pokemonDetailViewModel: pokemonDetailViewModel, homeListModel: item)
+        let vc = DetailViewController(homeListModel: item)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -235,6 +245,8 @@ extension HomeViewController {
 
 extension HomeViewController: PokemonListViewModelProtocol {
     func updatePokemonListUI(loadMorePokemons: [PokemonListModel]) {
+        indicator?.stopAnimating()
+        
         if isShowFavorite {
             cv?.reloadData()
         } else {
@@ -280,18 +292,18 @@ extension HomeViewController: HomeNavigationViewProtocol {
 
 extension HomeViewController: HomePokemonCellProtocol {
     func homePokemonCellFavoriteUpdated() {
-        handleUpdateFavorite()
+        if isShowFavorite {
+            handleUpdateFavorite()
+        }
     }
     
     func handleUpdateFavorite() {
-        if isShowFavorite {
-            pokemonListViewModel.updateFavoritePokemons()
-            if pokemonListViewModel.getPokemonList(isShowFavorite: isShowFavorite).count > 0 {
-                cv?.reloadData()
-            } else {
-                navigationView?.btnFavoriteTapped()
-                cv?.reloadData()
-            }
+        pokemonListViewModel.updateFavoritePokemons()
+        if pokemonListViewModel.getPokemonList(isShowFavorite: isShowFavorite).count > 0 {
+            cv?.reloadData()
+        } else if isShowFavorite {
+            navigationView?.btnFavoriteTapped()
+            cv?.reloadData()
         }
     }
 }
