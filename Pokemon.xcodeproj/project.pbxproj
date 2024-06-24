@@ -89,6 +89,8 @@
 		A4B4ECF42C28383300C9EDCE /* NotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECF32C28383300C9EDCE /* NotificationHelper.swift */; };
 		A4B4ECF62C290B5900C9EDCE /* evolution_chain.json in Resources */ = {isa = PBXBuildFile; fileRef = A4B4ECF52C290B5900C9EDCE /* evolution_chain.json */; };
 		A4B4ECF82C2939BE00C9EDCE /* AnimationHelper_pbn10.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECF72C2939BE00C9EDCE /* AnimationHelper_pbn10.swift */; };
+		A4B4ECFA2C294C5300C9EDCE /* PokemonSpeciesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECF92C294C5300C9EDCE /* PokemonSpeciesViewModelTests.swift */; };
+		A4B4ECFC2C294C5E00C9EDCE /* PokemonEvolutionChainViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B4ECFB2C294C5E00C9EDCE /* PokemonEvolutionChainViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -217,6 +219,8 @@
 		A4B4ECF32C28383300C9EDCE /* NotificationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHelper.swift; sourceTree = "<group>"; };
 		A4B4ECF52C290B5900C9EDCE /* evolution_chain.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = evolution_chain.json; sourceTree = "<group>"; };
 		A4B4ECF72C2939BE00C9EDCE /* AnimationHelper_pbn10.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationHelper_pbn10.swift; sourceTree = "<group>"; };
+		A4B4ECF92C294C5300C9EDCE /* PokemonSpeciesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSpeciesViewModelTests.swift; sourceTree = "<group>"; };
+		A4B4ECFB2C294C5E00C9EDCE /* PokemonEvolutionChainViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonEvolutionChainViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -501,6 +505,8 @@
 			children = (
 				A4B4EC9F2C2566FE00C9EDCE /* PokemonListViewModelTests.swift */,
 				A4B4ECA12C25670700C9EDCE /* PokemonDetailViewModelTests.swift */,
+				A4B4ECF92C294C5300C9EDCE /* PokemonSpeciesViewModelTests.swift */,
+				A4B4ECFB2C294C5E00C9EDCE /* PokemonEvolutionChainViewModelTests.swift */,
 				A4B4ECA32C25671200C9EDCE /* PokemonTypeViewModelTests.swift */,
 			);
 			path = ViewModels;
@@ -767,8 +773,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4B4ECA42C25671200C9EDCE /* PokemonTypeViewModelTests.swift in Sources */,
+				A4B4ECFA2C294C5300C9EDCE /* PokemonSpeciesViewModelTests.swift in Sources */,
 				A4B4EC982C254A2C00C9EDCE /* PokemonTypeListLoaderTests.swift in Sources */,
 				A4B4ECA22C25670700C9EDCE /* PokemonDetailViewModelTests.swift in Sources */,
+				A4B4ECFC2C294C5E00C9EDCE /* PokemonEvolutionChainViewModelTests.swift in Sources */,
 				A4B4ECA02C2566FE00C9EDCE /* PokemonListViewModelTests.swift in Sources */,
 				A4B4ECF22C281F5800C9EDCE /* PokemonEvolutionChainParserTests.swift in Sources */,
 				A4B4EC942C254A1000C9EDCE /* PokemonListLoaderTests.swift in Sources */,
