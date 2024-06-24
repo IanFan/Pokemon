@@ -13,12 +13,13 @@ class DetailViewController: UIViewController {
     let scale: CGFloat = UIFactory.getScale()
     var pokemonDetailViewModel: PokemonDetailViewModel!
     let pokemonSpeciesViewModel = PokemonSpeciesViewModel()
+    let pokemonEvolutionChainViewModel = PokemonEvolutionChainViewModel()
     var homeListModel: HomePokemonListModel!
     
     var refreshControl: UIRefreshControl!
     var infoView: DetailInfoView!
     var flavorView: DetailFlavorView!
-//    var evolutionView: DetailEvolutionView!
+    var evolutionView: DetailEvolutionView!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
@@ -33,6 +34,7 @@ class DetailViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         self.pokemonDetailViewModel = pokemonDetailViewModel
         pokemonDetailViewModel.delegate = self
+        pokemonEvolutionChainViewModel.delegate = self
         self.homeListModel = homeListModel
     }
     
@@ -118,7 +120,6 @@ class DetailViewController: UIViewController {
         
         // infoView
         let infoView = DetailInfoView(frame: .zero, item: homeListModel)
-        infoView.backgroundColor = .randomColor
         view.addSubview(infoView)
         self.infoView = infoView
         infoView.translatesAutoresizingMaskIntoConstraints = false
@@ -135,7 +136,6 @@ class DetailViewController: UIViewController {
         // flavorView
         let flavorView = DetailFlavorView()
         flavorView.translatesAutoresizingMaskIntoConstraints = false
-        flavorView.backgroundColor = .randomColor
         view.addSubview(flavorView)
         self.flavorView = flavorView
         flavorView.snp.makeConstraints { make in
@@ -143,7 +143,13 @@ class DetailViewController: UIViewController {
             make.trailing.equalTo(contentView.snp.trailing)
         }
         mainStackView.addArrangedSubview(flavorView)
-        flavorView.setContentCompressionResistancePriority(.required, for: .vertical)
+        
+        // evolutionView
+        let evolutionView = DetailEvolutionView()
+        evolutionView.axis = .vertical
+        evolutionView.spacing = 0
+        self.evolutionView = evolutionView
+        mainStackView.addArrangedSubview(evolutionView)
     }
     
     func requestAPIs(isRefresh: Bool) {
@@ -183,6 +189,15 @@ extension DetailViewController: PokemonSpeciesViewModelProtocol {
     func updatePokemonSpeciesUI(pokemonSpeciesModel: PokemonSpeciesModel) {
         print("updatePokemonSpeciesUI")
         flavorView.setupContent(item: pokemonSpeciesModel)
-        self.view.layoutIfNeeded()
+        
+        if let evolutionChainId = pokemonSpeciesViewModel.getEvolutionChainId() {
+            pokemonEvolutionChainViewModel.loadData(isRefresh: false, id: evolutionChainId)
+        }
+    }
+}
+
+extension DetailViewController: PokemonEvolutionChainViewModelProtocol {
+    func updatePokemonEvolutionChainUI(pokemonEvolutionChainModel: PokemonEvolutionChainModel, speciesList: [PokemonSpecies]) {
+        evolutionView?.setupContent(items: speciesList)
     }
 }

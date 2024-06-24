@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol PokemonEvolutionChainViewModelProtocol: AnyObject {
-    func updatePokemonEvolutionChainUI(pokemonEvolutionChainModel: PokemonEvolutionChainModel)
+    func updatePokemonEvolutionChainUI(pokemonEvolutionChainModel: PokemonEvolutionChainModel, speciesList: [PokemonSpecies])
 }
 
 class PokemonEvolutionChainViewModel: NSObject {
@@ -17,6 +17,7 @@ class PokemonEvolutionChainViewModel: NSObject {
     var successAction: (() -> Void)?
     var failAction: (() -> Void)?
     var pokemonEvolutionChainModel: PokemonEvolutionChainModel?
+    var speciesList = [PokemonSpecies]()
     
     func loadData(isRefresh: Bool = false, id: Int) {
         loadData(isRefresh: isRefresh, id: id, completion: { [weak self] result in
@@ -24,8 +25,8 @@ class PokemonEvolutionChainViewModel: NSObject {
             switch result {
             case .success(let resultParams):
                 DispatchQueue.main.async {
-                    let obj = resultParams
-                    self.delegate?.updatePokemonEvolutionChainUI(pokemonEvolutionChainModel: obj)
+                    let (obj, specesList) = resultParams
+                    self.delegate?.updatePokemonEvolutionChainUI(pokemonEvolutionChainModel: obj, speciesList: specesList)
                 }
             case .failure(let error):
                 break
@@ -33,7 +34,7 @@ class PokemonEvolutionChainViewModel: NSObject {
         })
     }
     
-    func loadData(isRefresh: Bool = false, id: Int, completion: @escaping (Result<PokemonEvolutionChainModel, Error>) -> Void) {
+    private func loadData(isRefresh: Bool = false, id: Int, completion: @escaping (Result<(PokemonEvolutionChainModel, [PokemonSpecies]), Error>) -> Void) {
         
         let params = FileParams_pokemonEvolutionChain(id: id)
         let loader = GenericSingleDataLoader(dataLoader: PokemonEvolutionChainLoader())
@@ -44,7 +45,9 @@ class PokemonEvolutionChainViewModel: NSObject {
                 let obj = resultParams
                 DispatchQueue.main.async {
                     self.pokemonEvolutionChainModel = obj
-                    completion(.success(obj))
+                    let specesList = self.getChainSpeciesList(model: obj)
+                    self.speciesList = specesList
+                    completion(.success((obj, specesList)))
                     self.successAction?()
                 }
             case .failure(let error):
@@ -55,5 +58,26 @@ class PokemonEvolutionChainViewModel: NSObject {
                 }
             }
         })
+    }
+    
+    private func getChainSpeciesList(model: PokemonEvolutionChainModel) -> [PokemonSpecies] {
+        var ans = [PokemonSpecies]()
+        var chains = [PokemonChainLink]()
+        if let chain = model.chain {
+            chains.append(chain)
+        }
+        while !chains.isEmpty {
+            var tmpChains = [PokemonChainLink]()
+            for chain in chains {
+                if let species = chain.species, let name = species.name, let url = species.url {
+                    if let evolves_to = chain.evolves_to, !evolves_to.isEmpty {
+                        tmpChains.append(contentsOf: evolves_to)
+                    }
+                    ans.append(species)
+                }
+            }
+            chains = tmpChains
+        }
+        return ans
     }
 }

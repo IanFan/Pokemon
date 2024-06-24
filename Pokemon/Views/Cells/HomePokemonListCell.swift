@@ -70,7 +70,6 @@ class HomePokemonListCell: HomePokemonCell {
     
     func setupUI() {
 //        contentView.backgroundColor = ColorFactory.white2
-        contentView.backgroundColor = .randomColor
         
         let ivSprite = UIFactory.createImage(name: "")
         let lbId = UIFactory.createLabel(size: 14*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
@@ -137,7 +136,7 @@ class HomePokemonListCell: HomePokemonCell {
         self.item = item
         
         lbName?.text = item.name
-        lbId?.text = String(item.id)
+        lbId?.text = item.idStr
         lbTypes?.text = item.types.joined(separator: ", ")
         
         ivSprite?.image = nil

@@ -23,7 +23,7 @@ struct PokemonDetailModel: Codable {
     let order: Int?
 //    let past_abilities: [String]?
 //    let past_types: [String]?
-    let species: Species?
+    let species: PokemonSpecies?
     let sprites: Sprites?
     let stats: [Stat]?
     let types: [PokemonType]?
@@ -87,9 +87,17 @@ struct VersionGroup: Codable {
     let url: String?
 }
 
-struct Species: Codable {
+struct PokemonSpecies: Codable {
     let name: String?
     let url: String?
+    
+    var speciesId: Int {
+        guard let lastPathComponent = url?.split(separator: "/").last else {
+            return 0
+        }
+        let cleanedString = lastPathComponent.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        return Int(cleanedString) ?? 0
+    }
 }
 
 struct Sprites: Codable {

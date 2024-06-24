@@ -9,82 +9,109 @@ import Foundation
 import UIKit
 import SnapKit
 
-class DetailEvolutionView: UIView {
+class DetailEvolutionView: UIStackView {
     let scale: CGFloat = UIFactory.getScale()
-    var item: PokemonSpeciesModel!
+    var items: [PokemonSpecies]!
     
-    var lbFlavor: UILabel!
+    var evolotionViews = [EvolutionView]()
+    var lbTitle: UILabel!
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupViews() {
+        
+    }
+    
+    func setupContent(items: [PokemonSpecies]) {
+        guard !items.isEmpty, evolotionViews.isEmpty else {
+            return
+        }
+        self.items = items
+        
+        let margin = 20*scale
+        let itemInset = 10*scale
+        
+        let lbTitle = UIFactory.createLabel(size: 16*scale, text: "Evolution Chain".localized(), color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
+        addSubview(lbTitle)
+        lbTitle.snp.makeConstraints { make in
+            make.top.equalTo(snp.top).offset(10*scale)
+            make.leading.equalTo(snp.leading).offset(margin)
+            make.trailing.equalTo(snp.trailing).offset(-margin)
+        }
+        lbTitle.textAlignment = .center
+        self.addArrangedSubview(lbTitle)
+        
+        for i in 0..<items.count {
+            let item = items[i]
+            let v = EvolutionView()
+            v.translatesAutoresizingMaskIntoConstraints = false
+            v.setupContent(item: item)
+            evolotionViews.append(v)
+            self.addArrangedSubview(v)
+            
+            if i != items.count-1 {
+                let ivArrow = UIFactory.createImage(name: "arrow.down", tintColor: ColorFactory.greyishBrown)
+                ivArrow.contentMode = .scaleAspectFit
+                addSubview(ivArrow)
+                ivArrow.snp.makeConstraints { make in
+                    make.centerX.equalTo(snp.centerX)
+                    make.width.equalTo(20*scale)
+                    make.height.equalTo(20*scale)
+                }
+                self.addArrangedSubview(ivArrow)
+            }
+        }
+    }
+}
+
+class EvolutionView: UIView {
+    let scale: CGFloat = UIFactory.getScale()
+    var item: PokemonSpecies!
+    
+    var btnEvolution: UIButton!
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     private func setupViews() {
-        /*
-        let ivSprite = UIFactory.createImage(name: "")
-        let lbId = UIFactory.createLabel(size: 16*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
-        let lbName = UIFactory.createLabel(size: 16*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
-        let lbTypes = UIFactory.createLabel(size: 16*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
-        let btnFavorite = UIFactory.createImageButton(name: "", tintColor: ColorFactory.heartRed)
+        let btnEvolution = UIFactory.createTextButton(size: 18*scale, text: "", textColor: ColorFactory.white2, bgColor: ColorFactory.greyishBrown, font: .PingFangTCRegular, corner: 15*scale)
         
-        self.ivSprite = ivSprite
-        self.lbId = lbId
-        self.lbName = lbName
-        self.lbTypes = lbTypes
-        self.btnFavorite = btnFavorite
+        self.btnEvolution = btnEvolution
         
-        addSubview(ivSprite)
-        addSubview(lbId)
-        addSubview(lbName)
-        addSubview(lbTypes)
-        addSubview(btnFavorite)
+        addSubview(btnEvolution)
         
-        ivSprite.contentMode = .scaleAspectFit
-        btnFavorite.addTarget(self, action: #selector(btnFavoriteTapped), for: .touchUpInside)
+        let margin = 10*scale
+        let itemInset = 10*scale
         
-        let margin = 20*scale
-        let itemInset = 15*scale
+        self.snp.makeConstraints { make in
+            make.height.equalTo(btnEvolution.snp.height).offset(2*margin)
+        }
         
-        ivSprite.snp.makeConstraints { make in
+        btnEvolution.snp.makeConstraints { make in
+            make.centerX.equalTo(snp.centerX)
             make.centerY.equalTo(snp.centerY)
-            make.leading.equalTo(snp.leading).offset(margin)
-            make.width.equalTo(90*scale)
-            make.height.equalTo(90*scale)
-        }
-        
-        lbId.snp.makeConstraints { make in
-            make.bottom.equalTo(lbName.snp.top).offset(-4*scale)
-            make.leading.equalTo(snp.leading).offset(90*scale+itemInset+margin)
-            make.trailing.equalTo(snp.trailing).offset(-44*scale-itemInset-margin)
-            make.height.equalTo(20*scale)
-        }
-        
-        lbName.snp.makeConstraints { make in
-            make.center.equalTo(snp.center)
-            make.leading.equalTo(lbId.snp.leading)
-            make.trailing.equalTo(lbId.snp.trailing)
-            make.height.equalTo(20*scale)
-        }
-        
-        lbTypes.snp.makeConstraints { make in
-            make.top.equalTo(lbName.snp.bottom).offset(4*scale)
-            make.leading.equalTo(lbId.snp.leading)
-            make.trailing.equalTo(lbId.snp.trailing)
-            make.height.equalTo(20*scale)
-        }
-        
-        btnFavorite.snp.makeConstraints { make in
-            make.centerY.equalTo(snp.centerY)
-            make.trailing.equalTo(snp.trailing).offset(-margin)
-            make.width.equalTo(44*scale)
+            make.width.equalTo(200*scale)
             make.height.equalTo(44*scale)
         }
-         */
     }
     
-    func setupContent(item: PokemonSpeciesModel) {
+    func setupContent(item: PokemonSpecies) {
         self.item = item
         
-//        lbFlavor?.text = item.name
+        let name = item.name
+        btnEvolution?.setTitle(name, for: .normal)
     }
 }

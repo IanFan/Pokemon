@@ -13,6 +13,7 @@ class DetailFlavorView: UIView {
     let scale: CGFloat = UIFactory.getScale()
     var item: PokemonSpeciesModel!
     
+    var lbTitle: UILabel!
     var lbFlavor: UILabel!
     
     override init(frame: CGRect) {
@@ -25,25 +26,38 @@ class DetailFlavorView: UIView {
     }
     
     private func setupViews() {
+        let lbTitle = UIFactory.createLabel(size: 16*scale, text: "Flavor".localized(), color: ColorFactory.greyishBrown, font: .PingFangTCMedium)
         let lbFlavor = UIFactory.createLabel(size: 16*scale, text: "", color: ColorFactory.greyishBrown, font: .PingFangTCRegular)
         
+        self.lbTitle = lbTitle
         self.lbFlavor = lbFlavor
         
+        addSubview(lbTitle)
         addSubview(lbFlavor)
         
+        lbTitle.textAlignment = .center
+        
         lbFlavor.numberOfLines = 0
+        lbFlavor.textAlignment = .center
+        lbFlavor.alpha = 0
         
         let margin = 20*scale
-        let itemInset = 15*scale
+        let itemInset = 5*scale
         
-        self.snp.makeConstraints { make in
-            make.height.equalTo(lbFlavor.snp.height).offset(2*margin)
-        }
-        
-        lbFlavor.snp.makeConstraints { make in
+        lbTitle.snp.makeConstraints { make in
             make.top.equalTo(snp.top).offset(margin)
             make.leading.equalTo(snp.leading).offset(margin)
             make.trailing.equalTo(snp.trailing).offset(-margin)
+        }
+        
+        lbFlavor.snp.makeConstraints { make in
+            make.top.equalTo(lbTitle.snp.bottom).offset(itemInset)
+            make.leading.equalTo(snp.leading).offset(margin)
+            make.trailing.equalTo(snp.trailing).offset(-margin)
+        }
+        
+        self.snp.makeConstraints { make in
+            make.bottom.equalTo(lbFlavor.snp.bottom).offset(margin)
         }
     }
     
@@ -59,15 +73,15 @@ class DetailFlavorView: UIView {
             if let name = flavor_text_entrie.language?.name, name == language,
                let flavor_text = flavor_text_entrie.flavor_text, !flavor_text.isEmpty
             {
-                flavorTextList.append(flavor_text.replacingOccurrences(of: "\n", with: ""))
+//                flavorTextList.append(flavor_text.replacingOccurrences(of: "\n", with: ""))
+                flavorTextList.append(flavor_text)
                 break
             }
         }
         
         if !flavorTextList.isEmpty {
+            lbFlavor.alpha = 1
             lbFlavor?.text = flavorTextList[0]
         }
-        
-        self.layoutIfNeeded()
     }
 }

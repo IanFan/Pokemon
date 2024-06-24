@@ -56,4 +56,11 @@ class PokemonSpeciesViewModel: NSObject {
             }
         })
     }
+    
+    func getEvolutionChainId() -> Int? {
+        guard let model = pokemonSpeciesModel, let evolutionChainId = model.evolution_chain?.id else {
+            return nil
+        }
+        return evolutionChainId
+    }
 }

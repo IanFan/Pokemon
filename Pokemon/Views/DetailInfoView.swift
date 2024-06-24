@@ -98,7 +98,7 @@ class DetailInfoView: UIView {
         self.item = item
         
         lbName?.text = item.name
-        lbId?.text = String(item.id)
+        lbId?.text = item.idStr
         lbTypes?.text = item.types.joined(separator: ", ")
         
         ivSprite?.image = nil

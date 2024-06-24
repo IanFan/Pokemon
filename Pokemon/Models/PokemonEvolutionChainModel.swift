@@ -10,14 +10,14 @@ import Foundation
 struct PokemonEvolutionChainModel: Codable {
     let id: Int
     let baby_trigger_item: PokemonItem?
-    let chain: ChainLink?
+    let chain: PokemonChainLink?
 }
 
-struct ChainLink: Codable {
+struct PokemonChainLink: Codable {
     let evolution_details: [EvolutionDetail]?
-    let evolves_to: [ChainLink]?
+    let evolves_to: [PokemonChainLink]?
     let is_baby: Bool?
-    let species: Species?
+    let species: PokemonSpecies?
 }
 
 struct EvolutionDetail: Codable {

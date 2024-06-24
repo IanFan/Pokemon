@@ -13,4 +13,8 @@ struct HomePokemonListModel: Codable {
     let imageUrlStr: String
     let types: [String]
     var isFavorite: Bool
+    
+    var idStr: String {
+        return "No." + String(format: "%04d", id)
+    }
 }
